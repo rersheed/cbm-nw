@@ -65,3 +65,13 @@ class DataTickNotifier extends Notifier<int> {
     return 0;
   }
 }
+
+
+final pendingLoginUserProvider =
+    NotifierProvider<PendingLoginNotifier, DemoUser?>(PendingLoginNotifier.new);
+
+class PendingLoginNotifier extends Notifier<DemoUser?> {
+  @override
+  DemoUser? build() => null;
+  void setUser(DemoUser? user) => state = user;
+}

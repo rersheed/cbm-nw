@@ -179,6 +179,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       : () async {
                           setState(() => busy = true);
                           if (useOtp) {
+                            ref.read(pendingLoginUserProvider.notifier).setUser(selected);
                             if (mounted) {
                               setState(() => busy = false);
                               context.push('/otp');

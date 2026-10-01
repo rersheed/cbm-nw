@@ -36,9 +36,11 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       return;
     }
     setState(() => busy = true);
+    final pending = ref.read(pendingLoginUserProvider);
     final repo = ref.read(repositoryProvider);
-    final user = repo.demoUsers.first;
+    final user = pending ?? repo.demoUsers.first;
     await ref.read(sessionProvider.notifier).login(user);
+    ref.read(pendingLoginUserProvider.notifier).setUser(null);
     if (mounted) setState(() => busy = false);
   }
 
