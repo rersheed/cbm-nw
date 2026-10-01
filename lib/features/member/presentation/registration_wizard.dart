@@ -18,20 +18,35 @@ class _RegistrationWizardState extends ConsumerState<RegistrationWizard> {
   int step = 0;
   bool busy = false;
   bool photoTaken = false;
-  bool idUploaded = false;
+  bool voterCardUploaded = false;
+  bool consent = false;
 
   final nameCtrl = TextEditingController();
   final phoneCtrl = TextEditingController();
+  final emailCtrl = TextEditingController();
   final occupationCtrl = TextEditingController();
-  final educationCtrl = TextEditingController();
+  final vinCtrl = TextEditingController();
   String gender = 'male';
   DateTime? dob = DateTime(1998, 5, 12);
+  bool isRegisteredVoter = true;
 
   String? stateId;
   String? lgaId;
   String? wardId;
-  String? communityId;
-  String category = MemberCategory.youth;
+  String? pollingUnitId;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final u = ref.read(sessionProvider);
+      if (u != null) {
+        nameCtrl.text = u.fullName;
+        phoneCtrl.text = u.phone;
+        emailCtrl.text = u.email ?? '';
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,32 +60,14 @@ class _RegistrationWizardState extends ConsumerState<RegistrationWizard> {
     final wards = lga?.wards ?? [];
     if (wardId == null && wards.isNotEmpty) wardId = wards.first.id;
     final ward = wardId != null ? repo.findWard(wardId!) : null;
-    final communities = ward?.communities ?? [];
-    if (communityId == null && communities.isNotEmpty) communityId = communities.first.id;
+    final pus = ward?.pollingUnits ?? [];
+    if (pollingUnitId == null && pus.isNotEmpty) pollingUnitId = pus.first.id;
+    final pu = pollingUnitId != null ? repo.findPollingUnit(pollingUnitId!) : null;
 
-    final titles = ['Personal', 'Location', 'Category', 'Photo', 'Review'];
+    const titles = ['Personal', 'Location', 'Voter', 'Photo', 'Review'];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Register · Step ${step + 1}/5'),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              await ref.read(repositoryProvider).saveDraft('reg_draft', {
-                'fullName': nameCtrl.text,
-                'phone': phoneCtrl.text,
-                'step': step,
-              });
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Draft saved offline (Hive)')),
-                );
-              }
-            },
-            child: const Text('Save draft'),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text('Register · Step ${step + 1}/5')),
       body: Column(
         children: [
           Padding(
@@ -99,7 +96,7 @@ class _RegistrationWizardState extends ConsumerState<RegistrationWizard> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 24),
               children: [
-                if (step == 0) ...[
+                if (step == 0)
                   FormSectionCard(
                     title: 'Personal information',
                     icon: Icons.person_outline,
@@ -107,10 +104,9 @@ class _RegistrationWizardState extends ConsumerState<RegistrationWizard> {
                       children: [
                         TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Full name')),
                         const SizedBox(height: 10),
-                        TextField(controller: phoneCtrl, keyboardType: TextInputType.phone, decoration: const InputDecoration(labelText: 'Phone')),
-                        const SizedBox(height: 10),
                         DropdownButtonFormField<String>(
-                          value: gender,
+                          key: ValueKey('gender-$gender'),
+                          initialValue: gender,
                           decoration: const InputDecoration(labelText: 'Gender'),
                           items: const [
                             DropdownMenuItem(value: 'male', child: Text('Male')),
@@ -134,14 +130,15 @@ class _RegistrationWizardState extends ConsumerState<RegistrationWizard> {
                             if (d != null) setState(() => dob = d);
                           },
                         ),
-                        TextField(controller: occupationCtrl, decoration: const InputDecoration(labelText: 'Occupation')),
+                        TextField(controller: phoneCtrl, keyboardType: TextInputType.phone, decoration: const InputDecoration(labelText: 'Phone')),
                         const SizedBox(height: 10),
-                        TextField(controller: educationCtrl, decoration: const InputDecoration(labelText: 'Education')),
+                        TextField(controller: emailCtrl, keyboardType: TextInputType.emailAddress, decoration: const InputDecoration(labelText: 'Email (optional)')),
+                        const SizedBox(height: 10),
+                        TextField(controller: occupationCtrl, decoration: const InputDecoration(labelText: 'Occupation')),
                       ],
                     ),
                   ),
-                ],
-                if (step == 1) ...[
+                if (step == 1)
                   FormSectionCard(
                     title: 'Location (NW)',
                     icon: Icons.map_outlined,
@@ -149,83 +146,113 @@ class _RegistrationWizardState extends ConsumerState<RegistrationWizard> {
                     child: Column(
                       children: [
                         DropdownButtonFormField<String>(
-                          value: stateId,
+                          key: ValueKey('state-$stateId'),
+                          initialValue: stateId,
                           decoration: const InputDecoration(labelText: 'State'),
                           items: [for (final s in states) DropdownMenuItem(value: s.id, child: Text(s.name))],
                           onChanged: (v) => setState(() {
                             stateId = v;
                             lgaId = null;
                             wardId = null;
-                            communityId = null;
+                            pollingUnitId = null;
                           }),
                         ),
                         const SizedBox(height: 10),
                         DropdownButtonFormField<String>(
-                          value: lgaId,
+                          key: ValueKey('lga-$lgaId'),
+                          initialValue: lgaId,
                           decoration: const InputDecoration(labelText: 'LGA'),
                           items: [for (final l in lgas) DropdownMenuItem(value: l.id, child: Text(l.name))],
                           onChanged: (v) => setState(() {
                             lgaId = v;
                             wardId = null;
-                            communityId = null;
+                            pollingUnitId = null;
                           }),
                         ),
                         const SizedBox(height: 10),
                         DropdownButtonFormField<String>(
-                          value: wardId,
+                          key: ValueKey('ward-$wardId'),
+                          initialValue: wardId,
                           decoration: const InputDecoration(labelText: 'Ward'),
                           items: [for (final w in wards) DropdownMenuItem(value: w.id, child: Text(w.name))],
                           onChanged: (v) => setState(() {
                             wardId = v;
-                            communityId = null;
+                            pollingUnitId = null;
                           }),
                         ),
                         const SizedBox(height: 10),
                         DropdownButtonFormField<String>(
-                          value: communityId,
-                          decoration: const InputDecoration(labelText: 'Community'),
-                          items: [for (final c in communities) DropdownMenuItem(value: c.id, child: Text(c.name))],
-                          onChanged: (v) => setState(() => communityId = v),
+                          key: ValueKey('pu-$pollingUnitId'),
+                          initialValue: pollingUnitId,
+                          decoration: const InputDecoration(labelText: 'Polling Unit'),
+                          items: [for (final p in pus) DropdownMenuItem(value: p.id, child: Text(p.name))],
+                          onChanged: (v) => setState(() => pollingUnitId = v),
                         ),
                       ],
                     ),
                   ),
-                ],
-                if (step == 2) ...[
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: [
-                      for (final c in MemberCategory.all)
-                        SizedBox(
-                          width: (MediaQuery.of(context).size.width - 56) / 2,
-                          child: SoftCard(
-                            color: category == c ? ApcColors.greenSoft : null,
-                            onTap: () => setState(() => category = c),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  _catIcon(c),
-                                  color: category == c ? ApcColors.green : ApcColors.muted,
-                                  size: 28,
+                if (step == 2)
+                  FormSectionCard(
+                    title: 'Voter registration',
+                    icon: Icons.how_to_vote_outlined,
+                    accent: ApcColors.blue,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text('Are you a registered voter?', style: TextStyle(fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ChoiceChip(
+                                selected: isRegisteredVoter,
+                                label: const Text('Yes'),
+                                selectedColor: ApcColors.green,
+                                labelStyle: TextStyle(
+                                  color: isRegisteredVoter ? Colors.white : ApcColors.ink,
+                                  fontWeight: FontWeight.w700,
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  MemberCategory.label(c),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    color: category == c ? ApcColors.green : ApcColors.ink,
-                                  ),
-                                ),
-                              ],
+                                onSelected: (_) => setState(() => isRegisteredVoter = true),
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: ChoiceChip(
+                                selected: !isRegisteredVoter,
+                                label: const Text('No'),
+                                selectedColor: ApcColors.green,
+                                labelStyle: TextStyle(
+                                  color: !isRegisteredVoter ? Colors.white : ApcColors.ink,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                onSelected: (_) => setState(() {
+                                  isRegisteredVoter = false;
+                                  vinCtrl.clear();
+                                  voterCardUploaded = false;
+                                }),
+                              ),
+                            ),
+                          ],
                         ),
-                    ],
+                        if (isRegisteredVoter) ...[
+                          const SizedBox(height: 14),
+                          TextField(controller: vinCtrl, decoration: const InputDecoration(labelText: 'VIN (Voter Identification Number)')),
+                          const SizedBox(height: 10),
+                          OutlinedButton.icon(
+                            onPressed: () => setState(() => voterCardUploaded = !voterCardUploaded),
+                            icon: Icon(voterCardUploaded ? Icons.check : Icons.upload_file_outlined),
+                            label: Text(voterCardUploaded ? 'Voter card uploaded (stub)' : 'Upload voter card (optional stub)'),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'VIN and voter card are visible to admins only — never on your public membership card or QR.',
+                            style: TextStyle(fontSize: 12, color: ApcColors.muted),
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
-                ],
-                if (step == 3) ...[
+                if (step == 3)
                   SoftCard(
                     child: Column(
                       children: [
@@ -249,47 +276,49 @@ class _RegistrationWizardState extends ConsumerState<RegistrationWizard> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(Icons.camera_alt_outlined, size: 48, color: ApcColors.muted),
-                                    Text('Camera stub', style: TextStyle(color: ApcColors.muted)),
+                                    Text('Camera / upload stub', style: TextStyle(color: ApcColors.muted)),
                                   ],
                                 ),
                         ),
                         const SizedBox(height: 12),
                         GradientCtaButton(
-                          label: photoTaken ? 'Retake photo' : 'Capture photo',
+                          label: photoTaken ? 'Retake photo' : 'Capture / upload photo',
                           icon: Icons.photo_camera_outlined,
                           onPressed: () => setState(() => photoTaken = true),
-                        ),
-                        const SizedBox(height: 10),
-                        OutlinedButton.icon(
-                          onPressed: () => setState(() => idUploaded = !idUploaded),
-                          icon: Icon(idUploaded ? Icons.check : Icons.upload_file_outlined),
-                          label: Text(idUploaded ? 'ID uploaded (optional)' : 'Upload ID (optional)'),
                         ),
                       ],
                     ),
                   ),
-                ],
                 if (step == 4) ...[
                   SoftCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _kv('Name', nameCtrl.text),
-                        _kv('Phone', phoneCtrl.text),
                         _kv('Gender', gender),
                         _kv('DOB', dob?.toIso8601String().split('T').first ?? '—'),
+                        _kv('Phone', phoneCtrl.text),
+                        _kv('Email', emailCtrl.text),
                         _kv('Occupation', occupationCtrl.text),
-                        _kv('Education', educationCtrl.text),
-                        _kv('Category', MemberCategory.label(category)),
                         _kv('State', state?.name ?? '—'),
                         _kv('LGA', lga?.name ?? '—'),
                         _kv('Ward', ward?.name ?? '—'),
-                        _kv('Community', communities.where((c) => c.id == communityId).map((c) => c.name).firstOrNull ?? '—'),
+                        _kv('Polling Unit', pu?.name ?? '—'),
+                        _kv('Registered voter', isRegisteredVoter ? 'Yes' : 'No'),
+                        if (isRegisteredVoter) ...[
+                          _kv('VIN', vinCtrl.text),
+                          _kv('Voter card', voterCardUploaded ? 'Uploaded (admin only)' : 'Not provided'),
+                        ],
                         _kv('Photo', photoTaken ? 'Captured' : 'Missing'),
-                        _kv('ID', idUploaded ? 'Uploaded' : 'Not provided'),
-                        const SizedBox(height: 12),
-                        ApprovalTimeline(currentStatus: 'pending', compact: true),
                       ],
+                    ),
+                  ),
+                  SoftCard(
+                    child: CheckboxListTile(
+                      value: consent,
+                      onChanged: (v) => setState(() => consent = v ?? false),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: const Text(AppConstants.consentNotice, style: TextStyle(fontSize: 13, height: 1.35)),
                     ),
                   ),
                 ],
@@ -315,47 +344,59 @@ class _RegistrationWizardState extends ConsumerState<RegistrationWizard> {
                     busy: busy,
                     onPressed: () async {
                       if (step < 4) {
-                        if (step == 0 && nameCtrl.text.trim().isEmpty) {
+                        if (step == 0 && (nameCtrl.text.trim().isEmpty || phoneCtrl.text.trim().isEmpty)) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Enter full name')),
+                            const SnackBar(content: Text('Enter full name and phone')),
+                          );
+                          return;
+                        }
+                        if (step == 2 && isRegisteredVoter && vinCtrl.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Enter VIN or choose No for registered voter')),
                           );
                           return;
                         }
                         setState(() => step++);
                         return;
                       }
+                      if (!consent) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Please accept the consent notice')),
+                        );
+                        return;
+                      }
                       setState(() => busy = true);
-                      final community = communities.where((c) => c.id == communityId).firstOrNull;
                       final member = Member(
                         id: const Uuid().v4(),
                         fullName: nameCtrl.text.trim(),
                         gender: gender,
                         dateOfBirth: dob,
                         phone: phoneCtrl.text.trim(),
+                        email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
                         occupation: occupationCtrl.text.trim(),
-                        education: educationCtrl.text.trim(),
-                        category: category,
                         status: MemberStatus.pending,
                         stateId: stateId,
                         lgaId: lgaId,
                         wardId: wardId,
-                        communityId: communityId,
+                        pollingUnitId: pollingUnitId,
+                        isRegisteredVoter: isRegisteredVoter,
+                        vin: isRegisteredVoter ? vinCtrl.text.trim() : null,
+                        voterCardUrl: isRegisteredVoter && voterCardUploaded ? 'stub://voter-card' : null,
                         photoUrl: photoTaken ? 'stub://photo' : null,
-                        idDocumentUrl: idUploaded ? 'stub://id' : null,
                         createdAt: DateTime.now(),
                         stateName: state?.name,
                         lgaName: lga?.name,
                         wardName: ward?.name,
-                        communityName: community?.name,
+                        pollingUnitName: pu?.name,
                       );
-                      final saved = await ref.read(repositoryProvider).submitMember(member);
-                      if (mounted) {
-                        setState(() => busy = false);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Submitted ${saved.fullName} — pending approval')),
-                        );
-                        context.pop();
-                      }
+                      await ref.read(repositoryProvider).submitMember(member);
+                      if (!mounted) return;
+                      setState(() => busy = false);
+                      final messenger = ScaffoldMessenger.of(context);
+                      messenger.showSnackBar(
+                        const SnackBar(content: Text('Submitted — status Pending')),
+                      );
+                      context.go('/member');
                     },
                   ),
                 ),
@@ -367,22 +408,11 @@ class _RegistrationWizardState extends ConsumerState<RegistrationWizard> {
     );
   }
 
-  IconData _catIcon(String c) => switch (c) {
-        MemberCategory.youth => Icons.sports_soccer_outlined,
-        MemberCategory.women => Icons.woman_outlined,
-        MemberCategory.student => Icons.school_outlined,
-        MemberCategory.professional => Icons.work_outline,
-        MemberCategory.business => Icons.storefront_outlined,
-        MemberCategory.volunteer => Icons.volunteer_activism_outlined,
-        MemberCategory.communityLeader => Icons.diversity_3_outlined,
-        _ => Icons.category_outlined,
-      };
-
   Widget _kv(String k, String v) => Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Row(
           children: [
-            SizedBox(width: 110, child: Text(k, style: const TextStyle(color: ApcColors.muted, fontWeight: FontWeight.w600))),
+            SizedBox(width: 120, child: Text(k, style: const TextStyle(color: ApcColors.muted, fontWeight: FontWeight.w600))),
             Expanded(child: Text(v.isEmpty ? '—' : v, style: const TextStyle(fontWeight: FontWeight.w700))),
           ],
         ),

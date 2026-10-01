@@ -1,76 +1,57 @@
-# CBM-NW — City Boy Movement North-West Membership Platform
+# CBM-NW — City Boy Movement North-West Membership
 
-Flutter + Dart membership registration and coordination app for **North-West Nigeria** (Kaduna, Kano, Katsina, Jigawa, Kebbi, Sokoto, Zamfara).
+Flutter membership app for **North-West Nigeria** (Kaduna, Kano, Katsina, Jigawa, Kebbi, Sokoto, Zamfara).
 
-**Branding:** City Boy Movement · green `#39a453` · blue `#5cc3e7` · red `#e52b32` · gold/brown `#976532`
+**Roles:** **Member** and **Admin** only.
+
+**Branding:** City Boy Movement · green `#39a453` · gold/brown `#976532`
 
 **Repo:** https://github.com/rersheed/cbm-nw  
 **Live web (GitHub Pages):** https://rersheed.github.io/cbm-nw/
 
-## Roles
+## Screens
 
-| Role | Home |
-|------|------|
-| Registration Agent | Dashboard + 5-step registration wizard + digital card |
-| Ward Coordinator | Ward stats + Approve/Reject queue |
-| LGA Coordinator | Totals, wards, pending + ward performance bars |
-| State Coordinator | Members / LGAs / agents + State→LGA→Ward→Members drill |
-| Admin (Situation Room) | NW totals, member table, agents, org tree, reports, comms |
+| Flow | Screens |
+|------|---------|
+| Auth | Splash, Login, Register, OTP, Forgot Password |
+| Member | Home (status), 5-step registration, Digital card (download/share stub), Profile |
+| Admin | Dashboard cards + breakdowns, Members list + filters/search, Pending approvals, Member detail (VIN/voter card admin-only) |
+
+### Registration steps
+1. Personal — name, gender, DOB, phone, email optional, occupation  
+2. Location — State → LGA → Ward → Polling Unit  
+3. Voter — registered Yes/No; if Yes: VIN + optional voter-card upload stub  
+4. Profile photo (camera/upload stub)  
+5. Review + consent → Submit → **Pending**
+
+Membership number (on approve): `CBM-NW-{STATE}-{######}`  
+QR / card: basic info only — **no VIN / voter card**.
 
 ## Stack
-
-- Flutter / Dart + **Riverpod** + **GoRouter**
-- **Hive** (offline registration drafts + sync queue)
-- **supabase_flutter** hybrid: always boots DemoRepository; probes Supabase and labels connection
-- Schema: `supabase/migrations/001_cbm_nw_schema.sql`
+- Flutter / Dart + Riverpod + GoRouter
+- Hive (offline drafts + sync queue)
+- supabase_flutter hybrid (DemoRepository + Supabase probe)
+- Schema: `supabase/migrations/001_cbm_nw_schema.sql` + **`002_simplify_member_admin.sql`** (apply 002)
 
 ## Supabase
-
 | | |
 |--|--|
-| Project | `cbm-nw` |
 | URL | `https://awoliraufydoeaoorutm.supabase.co` |
 | Ref | `awoliraufydoeaoorutm` |
-| Region | eu-central-1 |
-| Client key | **anon** (public) — see `.env.example` / `lib/core/supabase_config.dart` |
 
-Migration `001_cbm_nw_schema` is applied (states/lgas/wards/communities/profiles/members/approvals/messages/audit + open anon demo RLS + 7 NW states seeded). Local demo geo/members live in the Flutter DemoRepository for offline UX.
-
-### dart-define
-
-```bash
-flutter run -d chrome \
-  --dart-define=SUPABASE_URL=https://awoliraufydoeaoorutm.supabase.co \
-  --dart-define=SUPABASE_ANON_KEY=<anon-jwt>
-```
+**Privacy:** Demo-open RLS remains. VIN / voter_card_url must stay admin-only in the app; tighten RLS before production.
 
 ## Demo login
-
-1. Open the app → splash → login.
-2. Pick a **role chip** (Agent / Ward / LGA / State / Admin). Phone + demo password prefill.
-3. Tap **Login** (or **Use OTP instead** → any 6 digits → Verify).
-4. No real SMS; all data is seeded locally and works offline.
-
-## Screens shipped
-
-Auth: Splash, Login, OTP, Forgot Password  
-Agent: Dashboard, Registration wizard (5 steps), Digital membership card  
-Ward: Dashboard, Approval list  
-LGA: Dashboard + ward performance  
-State: Dashboard + geography drill  
-Admin: Situation, Members table, Agents, Org tree, Reports, Communication
+1. Splash → Login  
+2. Pick **Member** or **Admin** chip (phones prefill)  
+3. Password `demo1234` or OTP (any 6 digits)  
+4. **Member** `08030000001` (approved sample) · `08030000002` (pending) · **Admin** `08030000005`  
+5. Or **Create member account** → register → complete 5-step wizard  
 
 ## Build web (GitHub Pages)
-
 ```bash
 export PATH="/opt/flutter/bin:$PATH"
 flutter pub get
-flutter build web --base-href /cbm-nw/ \
-  --dart-define=SUPABASE_URL=https://awoliraufydoeaoorutm.supabase.co \
-  --dart-define=SUPABASE_ANON_KEY=<anon-jwt>
+flutter build web --base-href /cbm-nw/
 rm -rf docs && mkdir -p docs && cp -r build/web/* docs/ && touch docs/.nojekyll
 ```
-
-## Prerequisites
-
-- Flutter stable 3.35+ (Dart 3.9+)

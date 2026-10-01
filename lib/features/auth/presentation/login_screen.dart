@@ -34,7 +34,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           error: (e, _) => Center(child: Text('$e')),
           data: (repo) {
             final users = repo.demoUsers;
-            selected ??= users.isNotEmpty ? users.first : null;
+            // Prefer unique role chips: one Member + one Admin
+            final memberDemo = users.where((u) => u.role == AppRoles.member).firstOrNull;
+            final adminDemo = users.where((u) => u.role == AppRoles.admin).firstOrNull;
+            final chips = <DemoUser>[
+              if (memberDemo != null) memberDemo,
+              if (adminDemo != null) adminDemo,
+            ];
+            selected ??= chips.isNotEmpty ? chips.first : null;
             if (selected != null && phoneCtrl.text.isEmpty) {
               phoneCtrl.text = selected!.phone;
             }
@@ -92,12 +99,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           decoration: const InputDecoration(
                             labelText: 'Password (demo)',
                             prefixIcon: Icon(Icons.lock_outline_rounded),
-                            suffixIcon: Icon(Icons.visibility_outlined),
                           ),
                         ),
                       if (useOtp)
                         const Text(
-                          'OTP will be requested on the next screen (demo: 123456)',
+                          'OTP will be requested on the next screen (demo: any 6 digits)',
                           style: TextStyle(fontSize: 12, color: ApcColors.muted),
                         ),
                       const SizedBox(height: 8),
@@ -118,13 +124,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 18),
-                const Text('Pick a demo role', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                const Text('Demo role', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
                 const SizedBox(height: 10),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    for (final u in users)
+                    for (final u in chips)
                       ChoiceChip(
                         selected: selected?.id == u.id,
                         label: Text(AppRoles.shortLabel(u.role)),
@@ -190,9 +196,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           }
                         },
                 ),
+                const SizedBox(height: 14),
+                OutlinedButton(
+                  onPressed: () => context.push('/register'),
+                  child: const Text('Create member account'),
+                ),
                 const SizedBox(height: 18),
                 Text(
-                  'Agent → Ward → LGA → State → Admin',
+                  'Member · Admin',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: ApcColors.muted.withValues(alpha: 0.9),

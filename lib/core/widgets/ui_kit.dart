@@ -330,11 +330,9 @@ class ApprovalTimeline extends StatelessWidget {
   final bool compact;
 
   static const steps = [
-    ('Agent', 'Registered by field agent', Icons.person_pin_circle_outlined),
-    ('Ward', 'Ward coordinator review', Icons.account_tree_outlined),
-    ('LGA', 'LGA coordinator review', Icons.location_city_outlined),
-    ('State', 'State coordinator review', Icons.flag_outlined),
-    ('Approved', 'Membership active', Icons.verified_outlined),
+    ('Submitted', 'Registration received', Icons.edit_note_outlined),
+    ('Under review', 'Admin reviewing application', Icons.hourglass_top_outlined),
+    ('Decision', 'Approved or rejected', Icons.verified_outlined),
   ];
 
   int get _activeIndex {
@@ -343,7 +341,7 @@ class ApprovalTimeline extends StatelessWidget {
       case 'pending':
         return 1;
       case 'approved':
-        return 4;
+        return 2;
       case 'rejected':
         return -1;
       default:
@@ -384,7 +382,7 @@ class ApprovalTimeline extends StatelessWidget {
                       ),
                     ),
                     child: Icon(
-                      active < 0 && i == 0
+                      active < 0 && i == steps.length - 1
                           ? Icons.close
                           : i < active
                               ? Icons.check_rounded
@@ -409,7 +407,11 @@ class ApprovalTimeline extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        steps[i].$1,
+                        currentStatus == 'rejected' && i == steps.length - 1
+                            ? 'Rejected'
+                            : currentStatus == 'approved' && i == steps.length - 1
+                                ? 'Approved'
+                                : steps[i].$1,
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
                           color: i <= active && active >= 0 ? ApcColors.ink : ApcColors.muted,

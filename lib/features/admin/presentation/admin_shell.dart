@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/ui_kit.dart';
@@ -19,34 +20,9 @@ class _AdminShellState extends ConsumerState<AdminShell> {
   Widget build(BuildContext context) {
     ref.watch(dataTickProvider);
     final wide = MediaQuery.sizeOf(context).width >= 900;
-    final pages = [
-      const _SituationTab(),
-      const _MembersTab(),
-      const _AgentsTab(),
-      const _OrgTreeTab(),
-      const _ReportsTab(),
-      const _CommsTab(),
-    ];
-    final labels = ['Situation', 'Members', 'Agents', 'Org', 'Reports', 'Comms'];
-    final icons = [
-      Icons.monitor_heart_outlined,
-      Icons.table_chart_outlined,
-      Icons.support_agent_outlined,
-      Icons.account_tree_outlined,
-      Icons.insights_outlined,
-      Icons.campaign_outlined,
-    ];
-
-    final rail = NavigationRail(
-      selectedIndex: tab,
-      onDestinationSelected: (i) => setState(() => tab = i),
-      labelType: NavigationRailLabelType.all,
-      backgroundColor: ApcColors.white,
-      destinations: [
-        for (var i = 0; i < labels.length; i++)
-          NavigationRailDestination(icon: Icon(icons[i]), label: Text(labels[i])),
-      ],
-    );
+    final pages = const [_DashboardTab(), _MembersTab(), _PendingTab()];
+    final labels = ['Dashboard', 'Members', 'Pending'];
+    final icons = [Icons.dashboard_outlined, Icons.people_outline, Icons.pending_actions_outlined];
 
     return Scaffold(
       appBar: AppBar(
@@ -54,7 +30,16 @@ class _AdminShellState extends ConsumerState<AdminShell> {
           children: [
             Image.asset(AppConstants.cityBoyLogo, height: 32),
             const SizedBox(width: 10),
-            const Text('Situation Room · NW'),
+            const Flexible(child: Text('Admin · CBM-NW', overflow: TextOverflow.ellipsis)),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: ApcColors.brown.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(AppRadii.pill),
+              ),
+              child: const Text('Admin', style: TextStyle(color: ApcColors.brown, fontWeight: FontWeight.w900, fontSize: 12)),
+            ),
           ],
         ),
         actions: [
@@ -69,7 +54,16 @@ class _AdminShellState extends ConsumerState<AdminShell> {
       body: wide
           ? Row(
               children: [
-                rail,
+                NavigationRail(
+                  selectedIndex: tab,
+                  onDestinationSelected: (i) => setState(() => tab = i),
+                  labelType: NavigationRailLabelType.all,
+                  backgroundColor: ApcColors.white,
+                  destinations: [
+                    for (var i = 0; i < labels.length; i++)
+                      NavigationRailDestination(icon: Icon(icons[i]), label: Text(labels[i])),
+                  ],
+                ),
                 const VerticalDivider(width: 1),
                 Expanded(child: pages[tab]),
               ],
@@ -106,12 +100,37 @@ class _AdminShellState extends ConsumerState<AdminShell> {
   }
 }
 
-class _SituationTab extends ConsumerWidget {
-  const _SituationTab();
+class _DashboardTab extends ConsumerWidget {
+  const _DashboardTab();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final repo = ref.watch(repositoryProvider);
     final s = repo.stats();
+    final all = repo.members();
+    final byGender = <String, int>{};
+    final byOccupation = <String, int>{};
+    final byAge = <String, int>{'18-24': 0, '25-34': 0, '35-44': 0, '45+': 0, 'Unknown': 0};
+    final byDay = <String, int>{};
+    for (final m in all) {
+      byGender[m.gender ?? 'unknown'] = (byGender[m.gender ?? 'unknown'] ?? 0) + 1;
+      final occ = (m.occupation?.isNotEmpty == true) ? m.occupation! : 'Unspecified';
+      byOccupation[occ] = (byOccupation[occ] ?? 0) + 1;
+      final a = m.age;
+      if (a == null) {
+        byAge['Unknown'] = byAge['Unknown']! + 1;
+      } else if (a < 25) {
+        byAge['18-24'] = byAge['18-24']! + 1;
+      } else if (a < 35) {
+        byAge['25-34'] = byAge['25-34']! + 1;
+      } else if (a < 45) {
+        byAge['35-44'] = byAge['35-44']! + 1;
+      } else {
+        byAge['45+'] = byAge['45+']! + 1;
+      }
+      final day = DateFormat('MMM d').format(m.createdAt);
+      byDay[day] = (byDay[day] ?? 0) + 1;
+    }
+
     return ListView(
       padding: const EdgeInsets.all(18),
       children: [
@@ -119,174 +138,119 @@ class _SituationTab extends ConsumerWidget {
           spacing: 12,
           runSpacing: 12,
           children: [
-            _big('Members', s.registered, ApcColors.green),
-            _big('States', s.states, ApcColors.blue),
-            _big('Agents', s.agents, ApcColors.brown),
-            _big('Approved', s.approved, ApcColors.gold),
-            _big('Pending', s.pending, ApcColors.blue),
-            _big('Rejected', s.rejected, ApcColors.red),
+            _statCard('Total', s.total, ApcColors.green),
+            _statCard('Approved', s.approved, ApcColors.gold),
+            _statCard('Pending', s.pending, ApcColors.blue),
+            _statCard('Rejected', s.rejected, ApcColors.red),
           ],
         ),
         const SizedBox(height: 18),
-        const Text('Growth by state', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+        const Text('Members by State', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+        const SizedBox(height: 10),
+        SoftCard(child: _barList(repo.states.map((st) => MapEntry(st.name, repo.members(filters: MemberFilters(stateId: st.id)).length)).toList())),
+        const SizedBox(height: 14),
+        const Text('By LGA (top)', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+        const SizedBox(height: 10),
+        SoftCard(
+          child: _barList(() {
+            final entries = <MapEntry<String, int>>[];
+            for (final st in repo.states) {
+              for (final l in st.lgas) {
+                final n = repo.members(filters: MemberFilters(lgaId: l.id)).length;
+                if (n > 0) entries.add(MapEntry('${st.code} · ${l.name}', n));
+              }
+            }
+            entries.sort((a, b) => b.value.compareTo(a.value));
+            return entries.take(8).toList();
+          }()),
+        ),
+        const SizedBox(height: 14),
+        const Text('By Ward / Polling Unit (sample)', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
         const SizedBox(height: 10),
         SoftCard(
           child: Column(
             children: [
-              for (final st in repo.states)
-                Builder(builder: (_) {
-                  final n = repo.members(stateId: st.id).length;
-                  final maxN = repo.states
-                      .map((x) => repo.members(stateId: x.id).length)
-                      .fold<int>(1, (a, b) => a > b ? a : b);
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(children: [
-                          Expanded(child: Text(st.name, style: const TextStyle(fontWeight: FontWeight.w700))),
-                          Text('$n'),
-                        ]),
-                        const SizedBox(height: 4),
-                        LinearProgressIndicator(
-                          value: n / maxN,
-                          minHeight: 8,
-                          borderRadius: BorderRadius.circular(6),
-                          color: ApcColors.green,
-                          backgroundColor: ApcColors.surface,
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+              for (final m in all.take(6))
+                ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(m.fullName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  subtitle: Text('${m.wardName ?? '—'} · ${m.pollingUnitName ?? '—'}'),
+                  trailing: Text(MemberStatus.label(m.status), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+                ),
             ],
           ),
         ),
+        const SizedBox(height: 14),
+        Row(
+          children: [
+            Expanded(child: SoftCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text('Gender', style: TextStyle(fontWeight: FontWeight.w800)),
+              const SizedBox(height: 8),
+              _barList(byGender.entries.toList()),
+            ]))),
+            const SizedBox(width: 12),
+            Expanded(child: SoftCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text('Age bands', style: TextStyle(fontWeight: FontWeight.w800)),
+              const SizedBox(height: 8),
+              _barList(byAge.entries.toList()),
+            ]))),
+          ],
+        ),
+        const SizedBox(height: 14),
+        SoftCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Occupation', style: TextStyle(fontWeight: FontWeight.w800)),
+          const SizedBox(height: 8),
+          _barList(byOccupation.entries.toList()..sort((a, b) => b.value.compareTo(a.value))),
+        ])),
+        const SizedBox(height: 14),
+        SoftCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Registration trend', style: TextStyle(fontWeight: FontWeight.w800)),
+          const SizedBox(height: 8),
+          _barList(byDay.entries.toList()),
+        ])),
       ],
     );
   }
 
-  Widget _big(String l, int v, Color c) => SizedBox(
-        width: 160,
+  Widget _statCard(String label, int n, Color c) => SizedBox(
+        width: 150,
         child: SoftCard(
+          color: c.withValues(alpha: 0.08),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('$v', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: c)),
-              Text(l, style: const TextStyle(color: ApcColors.muted, fontWeight: FontWeight.w600)),
+              Text('$n', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: c)),
+              Text(label, style: const TextStyle(fontWeight: FontWeight.w700, color: ApcColors.muted)),
             ],
           ),
         ),
       );
-}
 
-class _MembersTab extends ConsumerWidget {
-  const _MembersTab();
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final members = ref.watch(repositoryProvider).members();
-    return LayoutBuilder(builder: (context, c) {
-      return SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: SoftCard(
-          padding: const EdgeInsets.all(8),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columns: const [
-                DataColumn(label: Text('Name')),
-                DataColumn(label: Text('ID')),
-                DataColumn(label: Text('Category')),
-                DataColumn(label: Text('State')),
-                DataColumn(label: Text('Status')),
-                DataColumn(label: Text('Phone')),
-              ],
-              rows: [
-                for (final m in members)
-                  DataRow(cells: [
-                    DataCell(Text(m.fullName)),
-                    DataCell(Text(m.memberCode ?? '—')),
-                    DataCell(Text(MemberCategory.label(m.category))),
-                    DataCell(Text(m.stateName ?? '—')),
-                    DataCell(Text(MemberStatus.label(m.status))),
-                    DataCell(Text(m.phone ?? '—')),
-                  ]),
-              ],
-            ),
-          ),
-        ),
-      );
-    });
-  }
-}
-
-class _AgentsTab extends ConsumerWidget {
-  const _AgentsTab();
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final repo = ref.watch(repositoryProvider);
-    final agents = repo.demoUsers.where((u) => u.role == AppRoles.registrationAgent).toList();
-    return ListView(
-      padding: const EdgeInsets.all(16),
+  Widget _barList(List<MapEntry<String, int>> entries) {
+    final maxN = entries.fold<int>(1, (a, e) => e.value > a ? e.value : a);
+    return Column(
       children: [
-        for (final a in agents)
-          SoftCard(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: CircleAvatar(backgroundColor: ApcColors.greenSoft, child: Text(a.fullName.characters.first)),
-              title: Text(a.fullName, style: const TextStyle(fontWeight: FontWeight.w800)),
-              subtitle: Text('${a.phone} · ${repo.findState(a.stateId ?? '')?.name ?? '—'}'),
-              trailing: Chip(
-                label: Text('${repo.members(registeredBy: a.id).length} regs'),
-                backgroundColor: ApcColors.greenSoft,
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _OrgTreeTab extends ConsumerWidget {
-  const _OrgTreeTab();
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final users = ref.watch(repositoryProvider).demoUsers;
-    final byRole = <String, List<DemoUser>>{};
-    for (final u in users) {
-      byRole.putIfAbsent(u.role, () => []).add(u);
-    }
-    final order = [
-      AppRoles.admin,
-      AppRoles.stateCoordinator,
-      AppRoles.lgaCoordinator,
-      AppRoles.wardCoordinator,
-      AppRoles.registrationAgent,
-    ];
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        for (final role in order)
-          SoftCard(
-            margin: const EdgeInsets.only(bottom: 12),
+        for (final e in entries)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(AppRoles.label(role), style: const TextStyle(fontWeight: FontWeight.w900, color: ApcColors.green)),
-                const SizedBox(height: 8),
-                for (final u in byRole[role] ?? <DemoUser>[])
-                  Padding(
-                    padding: EdgeInsets.only(left: order.indexOf(role) * 8.0, bottom: 6),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.person_outline, size: 18, color: ApcColors.muted),
-                        const SizedBox(width: 8),
-                        Text('${u.fullName} · ${u.phone}'),
-                      ],
-                    ),
+                Row(children: [
+                  Expanded(child: Text(e.key, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
+                  Text('${e.value}', style: const TextStyle(fontWeight: FontWeight.w800)),
+                ]),
+                const SizedBox(height: 4),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: e.value / maxN,
+                    minHeight: 8,
+                    backgroundColor: ApcColors.border,
+                    color: ApcColors.green,
                   ),
+                ),
               ],
             ),
           ),
@@ -295,185 +259,373 @@ class _OrgTreeTab extends ConsumerWidget {
   }
 }
 
-class _ReportsTab extends ConsumerWidget {
-  const _ReportsTab();
+class _MembersTab extends ConsumerStatefulWidget {
+  const _MembersTab();
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final repo = ref.watch(repositoryProvider);
-    final all = repo.members();
-    final byCat = <String, int>{};
-    final byGender = <String, int>{};
-    final byState = <String, int>{};
-    for (final m in all) {
-      byCat[m.category] = (byCat[m.category] ?? 0) + 1;
-      byGender[m.gender ?? 'unknown'] = (byGender[m.gender ?? 'unknown'] ?? 0) + 1;
-      byState[m.stateName ?? '?'] = (byState[m.stateName ?? '?'] ?? 0) + 1;
-    }
-    final wardRank = <({String name, int n})>[];
-    for (final st in repo.states) {
-      for (final l in st.lgas) {
-        for (final w in l.wards) {
-          wardRank.add((name: '${w.name} (${st.code})', n: repo.members(wardId: w.id).length));
-        }
-      }
-    }
-    wardRank.sort((a, b) => b.n.compareTo(a.n));
-
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        const Text('Membership by category', style: TextStyle(fontWeight: FontWeight.w800)),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final e in byCat.entries)
-              SoftCard(
-                child: Text('${MemberCategory.label(e.key)}: ${e.value}', style: const TextStyle(fontWeight: FontWeight.w700)),
-              ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const Text('State comparison', style: TextStyle(fontWeight: FontWeight.w800)),
-        SoftCard(
-          margin: const EdgeInsets.only(top: 8),
-          child: Column(
-            children: [
-              for (final e in byState.entries)
-                ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(e.key),
-                  trailing: Text('${e.value}', style: const TextStyle(fontWeight: FontWeight.w900)),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        const Text('Ward ranking (top 10)', style: TextStyle(fontWeight: FontWeight.w800)),
-        SoftCard(
-          margin: const EdgeInsets.only(top: 8),
-          child: Column(
-            children: [
-              for (final w in wardRank.take(10))
-                ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(w.name),
-                  trailing: Text('${w.n}', style: const TextStyle(fontWeight: FontWeight.w900, color: ApcColors.green)),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        const Text('Age / Gender', style: TextStyle(fontWeight: FontWeight.w800)),
-        SoftCard(
-          margin: const EdgeInsets.only(top: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (final e in byGender.entries) Text('${e.key}: ${e.value}', style: const TextStyle(fontWeight: FontWeight.w700)),
-              const SizedBox(height: 8),
-              Text(
-                'Avg age (approx): ${_avgAge(all)?.toStringAsFixed(0) ?? '—'}',
-                style: const TextStyle(color: ApcColors.muted),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  double? _avgAge(List<Member> all) {
-    final ages = all.map((m) => m.age).whereType<int>().toList();
-    if (ages.isEmpty) return null;
-    return ages.reduce((a, b) => a + b) / ages.length;
-  }
+  ConsumerState<_MembersTab> createState() => _MembersTabState();
 }
 
-class _CommsTab extends ConsumerStatefulWidget {
-  const _CommsTab();
-  @override
-  ConsumerState<_CommsTab> createState() => _CommsTabState();
-}
-
-class _CommsTabState extends ConsumerState<_CommsTab> {
-  String audience = 'all';
-  final body = TextEditingController();
-  bool busy = false;
+class _MembersTabState extends ConsumerState<_MembersTab> {
+  MemberFilters filters = const MemberFilters();
+  final searchCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final messages = ref.watch(repositoryProvider).messages();
-    return ListView(
-      padding: const EdgeInsets.all(16),
+    final repo = ref.watch(repositoryProvider);
+    final list = repo.members(filters: filters.copyWith(query: searchCtrl.text));
+    final states = repo.states;
+    final state = filters.stateId != null ? repo.findState(filters.stateId!) : null;
+    final lgas = state?.lgas ?? [];
+    final lga = filters.lgaId != null ? repo.findLga(filters.lgaId!) : null;
+    final wards = lga?.wards ?? [];
+    final ward = filters.wardId != null ? repo.findWard(filters.wardId!) : null;
+    final pus = ward?.pollingUnits ?? [];
+
+    return Column(
       children: [
-        SoftCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+          child: PillSearchField(
+            controller: searchCtrl,
+            hint: 'Search name, phone, membership no, VIN',
+            onChanged: (_) => setState(() {}),
+          ),
+        ),
+        SizedBox(
+          height: 48,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             children: [
-              const Text('Send message (demo)', style: TextStyle(fontWeight: FontWeight.w800)),
-              const SizedBox(height: 8),
-              for (final a in ['all', 'agents', 'coordinators', 'members'])
-                RadioListTile<String>(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(a[0].toUpperCase() + a.substring(1)),
-                  value: a,
-                  groupValue: audience,
-                  onChanged: (v) => setState(() => audience = v ?? 'all'),
-                ),
-              TextField(
-                controller: body,
-                maxLines: 4,
-                decoration: const InputDecoration(labelText: 'Message', alignLabelWithHint: true),
-              ),
-              const SizedBox(height: 12),
-              GradientCtaButton(
-                label: 'Send',
-                busy: busy,
-                icon: Icons.send_rounded,
-                onPressed: () async {
-                  if (body.text.trim().isEmpty) return;
-                  setState(() => busy = true);
-                  await ref.read(repositoryProvider).sendMessage(
-                        audienceScope: audience,
-                        body: body.text.trim(),
-                      );
-                  body.clear();
-                  if (mounted) {
-                    setState(() => busy = false);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Message sent (local/demo)')),
-                    );
-                  }
+              _filterChip(
+                'Status',
+                filters.status,
+                {
+                  null: 'All',
+                  MemberStatus.pending: 'Pending',
+                  MemberStatus.approved: 'Approved',
+                  MemberStatus.rejected: 'Rejected',
                 },
+                (v) => setState(() => filters = filters.copyWith(status: v, clearStatus: v == null)),
+              ),
+              const SizedBox(width: 8),
+              _filterChip(
+                'Gender',
+                filters.gender,
+                {null: 'All', 'male': 'Male', 'female': 'Female', 'other': 'Other'},
+                (v) => setState(() => filters = filters.copyWith(gender: v, clearGender: v == null)),
+              ),
+              const SizedBox(width: 8),
+              DropdownButton<String?>(
+                value: filters.stateId,
+                hint: const Text('State'),
+                items: [
+                  const DropdownMenuItem(value: null, child: Text('All states')),
+                  for (final s in states) DropdownMenuItem(value: s.id, child: Text(s.name)),
+                ],
+                onChanged: (v) => setState(() => filters = filters.copyWith(
+                      stateId: v,
+                      clearState: v == null,
+                      clearLga: true,
+                      clearWard: true,
+                      clearPu: true,
+                    )),
+              ),
+              const SizedBox(width: 8),
+              DropdownButton<String?>(
+                value: filters.lgaId,
+                hint: const Text('LGA'),
+                items: [
+                  const DropdownMenuItem(value: null, child: Text('All LGAs')),
+                  for (final l in lgas) DropdownMenuItem(value: l.id, child: Text(l.name)),
+                ],
+                onChanged: (v) => setState(() => filters = filters.copyWith(
+                      lgaId: v,
+                      clearLga: v == null,
+                      clearWard: true,
+                      clearPu: true,
+                    )),
+              ),
+              const SizedBox(width: 8),
+              DropdownButton<String?>(
+                value: filters.wardId,
+                hint: const Text('Ward'),
+                items: [
+                  const DropdownMenuItem(value: null, child: Text('All wards')),
+                  for (final w in wards) DropdownMenuItem(value: w.id, child: Text(w.name)),
+                ],
+                onChanged: (v) => setState(() => filters = filters.copyWith(
+                      wardId: v,
+                      clearWard: v == null,
+                      clearPu: true,
+                    )),
+              ),
+              const SizedBox(width: 8),
+              DropdownButton<String?>(
+                value: filters.pollingUnitId,
+                hint: const Text('PU'),
+                items: [
+                  const DropdownMenuItem(value: null, child: Text('All PUs')),
+                  for (final p in pus) DropdownMenuItem(value: p.id, child: Text(p.name)),
+                ],
+                onChanged: (v) => setState(() => filters = filters.copyWith(pollingUnitId: v, clearPu: v == null)),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 16),
-        const Text('Outbox', style: TextStyle(fontWeight: FontWeight.w800)),
-        const SizedBox(height: 8),
-        if (messages.isEmpty) const SoftCard(child: Text('No messages yet', style: TextStyle(color: ApcColors.muted))),
-        for (final m in messages)
-          SoftCard(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(m.audienceScope, style: const TextStyle(fontWeight: FontWeight.w800, color: ApcColors.green)),
-                Text(m.body),
-                Text(
-                  m.createdAt.toLocal().toString().split('.').first,
-                  style: const TextStyle(fontSize: 11, color: ApcColors.muted),
+        Expanded(
+          child: ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: list.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            itemBuilder: (_, i) {
+              final m = list[i];
+              return SoftCard(
+                onTap: () => _showDetail(context, m.id),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: ApcColors.greenSoft,
+                      child: Text(m.fullName.characters.first, style: const TextStyle(fontWeight: FontWeight.w900, color: ApcColors.green)),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(m.fullName, style: const TextStyle(fontWeight: FontWeight.w800)),
+                          Text(
+                            '${m.membershipNumber ?? 'No ID'} · ${m.phone ?? ''} · ${m.stateName ?? ''}',
+                            style: const TextStyle(fontSize: 12, color: ApcColors.muted),
+                          ),
+                        ],
+                      ),
+                    ),
+                    _statusPill(m.status),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
+        ),
       ],
     );
   }
+
+  Widget _filterChip(String label, String? value, Map<String?, String> options, ValueChanged<String?> onChanged) {
+    return PopupMenuButton<String?>(
+      onSelected: onChanged,
+      itemBuilder: (_) => [
+        for (final e in options.entries) PopupMenuItem(value: e.key, child: Text(e.value)),
+      ],
+      child: Chip(
+        label: Text('$label: ${options[value] ?? 'All'}'),
+        backgroundColor: ApcColors.greenSoft,
+      ),
+    );
+  }
+}
+
+class _PendingTab extends ConsumerWidget {
+  const _PendingTab();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final repo = ref.watch(repositoryProvider);
+    final list = repo.members(filters: const MemberFilters(status: MemberStatus.pending));
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: list.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      itemBuilder: (_, i) {
+        final m = list[i];
+        return SoftCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(child: Text(m.fullName, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16))),
+                  TextButton(onPressed: () => _showDetail(context, m.id), child: const Text('Detail')),
+                ],
+              ),
+              Text('${m.phone} · ${m.stateName} / ${m.lgaName} / ${m.wardName}', style: const TextStyle(color: ApcColors.muted, fontSize: 12)),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: GradientCtaButton(
+                      label: 'Approve',
+                      icon: Icons.check_rounded,
+                      onPressed: () async {
+                        await ref.read(repositoryProvider).approveMember(m.id);
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Approved ${m.fullName}')));
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        final reason = await _askReason(context);
+                        if (reason == null || reason.isEmpty) return;
+                        await ref.read(repositoryProvider).rejectMember(m.id, reason: reason);
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Rejected ${m.fullName}')));
+                        }
+                      },
+                      child: const Text('Reject'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+Widget _statusPill(String status) {
+  final c = switch (status) {
+    MemberStatus.approved => ApcColors.green,
+    MemberStatus.pending => ApcColors.blue,
+    MemberStatus.rejected => ApcColors.red,
+    _ => ApcColors.muted,
+  };
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+    decoration: BoxDecoration(color: c.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(AppRadii.pill)),
+    child: Text(MemberStatus.label(status), style: TextStyle(color: c, fontWeight: FontWeight.w800, fontSize: 11)),
+  );
+}
+
+Future<String?> _askReason(BuildContext context) async {
+  final ctrl = TextEditingController();
+  return showDialog<String>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: const Text('Rejection reason'),
+      content: TextField(controller: ctrl, decoration: const InputDecoration(hintText: 'Reason'), autofocus: true),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+        FilledButton(onPressed: () => Navigator.pop(ctx, ctrl.text.trim()), child: const Text('Reject')),
+      ],
+    ),
+  );
+}
+
+void _showDetail(BuildContext context, String memberId) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: ApcColors.surface,
+    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+    builder: (_) => _MemberDetailSheet(memberId: memberId),
+  );
+}
+
+class _MemberDetailSheet extends ConsumerWidget {
+  const _MemberDetailSheet({required this.memberId});
+  final String memberId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(dataTickProvider);
+    final m = ref.watch(repositoryProvider).findMember(memberId);
+    if (m == null) return const SizedBox(height: 200, child: Center(child: Text('Not found')));
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.75,
+      maxChildSize: 0.95,
+      builder: (_, controller) => ListView(
+        controller: controller,
+        padding: const EdgeInsets.all(20),
+        children: [
+          Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: ApcColors.border, borderRadius: BorderRadius.circular(4)))),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(child: Text(m.fullName, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 20))),
+              _statusPill(m.status),
+            ],
+          ),
+          if (m.membershipNumber != null)
+            Text(m.membershipNumber!, style: const TextStyle(fontWeight: FontWeight.w800, color: ApcColors.brown)),
+          const SizedBox(height: 14),
+          SoftCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _kv('Phone', m.phone ?? '—'),
+                _kv('Email', m.email ?? '—'),
+                _kv('Gender', m.gender ?? '—'),
+                _kv('DOB', m.dateOfBirth?.toIso8601String().split('T').first ?? '—'),
+                _kv('Age', '${m.age ?? '—'}'),
+                _kv('Occupation', m.occupation ?? '—'),
+                _kv('State', m.stateName ?? '—'),
+                _kv('LGA', m.lgaName ?? '—'),
+                _kv('Ward', m.wardName ?? '—'),
+                _kv('Polling Unit', m.pollingUnitName ?? '—'),
+                _kv('Registered', DateFormat.yMMMd().format(m.createdAt)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          SoftCard(
+            color: ApcColors.redSoft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Admin-only voter data', style: TextStyle(fontWeight: FontWeight.w900, color: ApcColors.red)),
+                const SizedBox(height: 8),
+                _kv('Registered voter', m.isRegisteredVoter ? 'Yes' : 'No'),
+                if (m.isRegisteredVoter) ...[
+                  _kv('VIN', m.vin ?? '—'),
+                  _kv('Voter card', m.voterCardUrl != null ? 'On file (stub)' : 'Not uploaded'),
+                ],
+              ],
+            ),
+          ),
+          if (m.status == MemberStatus.pending) ...[
+            const SizedBox(height: 14),
+            GradientCtaButton(
+              label: 'Approve member',
+              onPressed: () async {
+                await ref.read(repositoryProvider).approveMember(m.id);
+                if (context.mounted) Navigator.pop(context);
+              },
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: () async {
+                final reason = await _askReason(context);
+                if (reason == null || reason.isEmpty) return;
+                await ref.read(repositoryProvider).rejectMember(m.id, reason: reason);
+                if (context.mounted) Navigator.pop(context);
+              },
+              child: const Text('Reject with reason'),
+            ),
+          ],
+          if (m.rejectionReason != null) ...[
+            const SizedBox(height: 12),
+            Text('Rejection reason: ${m.rejectionReason}', style: const TextStyle(color: ApcColors.red, fontWeight: FontWeight.w700)),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _kv(String k, String v) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(width: 120, child: Text(k, style: const TextStyle(color: ApcColors.muted, fontWeight: FontWeight.w600))),
+            Expanded(child: Text(v, style: const TextStyle(fontWeight: FontWeight.w700))),
+          ],
+        ),
+      );
 }

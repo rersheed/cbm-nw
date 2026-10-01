@@ -13,14 +13,10 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
 
   final HiveDraftStore hive;
   final _uuid = const Uuid();
-  final _listeners = <void Function()>[];
 
   List<StateGeo> _states = [];
   List<DemoUser> _users = [];
   List<Member> _members = [];
-  final List<ApprovalRecord> _approvals = [];
-  final List<AppMessage> _messages = [];
-  final List<AuditEntry> _audit = [];
   DemoUser? _current;
   final Map<String, int> _seqByState = {};
 
@@ -50,16 +46,19 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
             code: lm['code'] as String? ?? lm['id'] as String,
             wards: ((lm['wards'] as List?) ?? []).map((w) {
               final wm = w as Map<String, dynamic>;
+              // Map legacy communities → polling units for NW demo geo
+              final communities = (wm['communities'] as List?) ?? [];
+              final pus = (wm['polling_units'] as List?) ?? communities;
               return WardGeo(
                 id: wm['id'] as String,
                 name: wm['name'] as String,
                 code: wm['code'] as String? ?? wm['id'] as String,
-                communities: ((wm['communities'] as List?) ?? []).map((c) {
+                pollingUnits: pus.map((c) {
                   final cm = c as Map<String, dynamic>;
-                  return CommunityGeo(
+                  return PollingUnitGeo(
                     id: cm['id'] as String,
                     name: cm['name'] as String,
-                    code: cm['code'] as String? ?? 'C01',
+                    code: cm['code'] as String? ?? 'PU01',
                   );
                 }).toList(),
               );
@@ -69,15 +68,52 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
       );
     }).toList();
 
-    _users = buildDemoUsers(_states);
-    _members = buildSeedMembers(_states, _users);
+    _members = buildSeedMembers(_states);
+    // Link userIds after building users
+    _users = buildDemoUsers(_states, _members);
+    for (var i = 0; i < _users.length; i++) {
+      final u = _users[i];
+      if (u.memberId != null) {
+        final mi = _members.indexWhere((m) => m.id == u.memberId);
+        if (mi >= 0) {
+          _members[mi] = Member(
+            id: _members[mi].id,
+            membershipNumber: _members[mi].membershipNumber,
+            fullName: _members[mi].fullName,
+            gender: _members[mi].gender,
+            dateOfBirth: _members[mi].dateOfBirth,
+            phone: u.phone,
+            email: u.email ?? _members[mi].email,
+            occupation: _members[mi].occupation,
+            status: _members[mi].status,
+            stateId: _members[mi].stateId,
+            lgaId: _members[mi].lgaId,
+            wardId: _members[mi].wardId,
+            pollingUnitId: _members[mi].pollingUnitId,
+            isRegisteredVoter: _members[mi].isRegisteredVoter,
+            vin: _members[mi].vin,
+            voterCardUrl: _members[mi].voterCardUrl,
+            photoUrl: _members[mi].photoUrl,
+            approvedBy: _members[mi].approvedBy,
+            approvedAt: _members[mi].approvedAt,
+            rejectionReason: _members[mi].rejectionReason,
+            rejectedAt: _members[mi].rejectedAt,
+            createdAt: _members[mi].createdAt,
+            stateName: _members[mi].stateName,
+            lgaName: _members[mi].lgaName,
+            wardName: _members[mi].wardName,
+            pollingUnitName: _members[mi].pollingUnitName,
+            userId: u.id,
+          );
+        }
+      }
+    }
     for (final m in _members) {
-      if (m.memberCode != null) {
-        final parts = m.memberCode!.split('-');
+      if (m.membershipNumber != null) {
+        final parts = m.membershipNumber!.split('-');
         if (parts.length >= 4) {
           final code = parts[2];
-          final n = int.tryParse(parts[3]) ?? 10000;
-          _seqByState[code] = (_seqByState[code] ?? 10000).clamp(0, n) < n ? n : (_seqByState[code] ?? n);
+          final n = int.tryParse(parts[3]) ?? 100000;
           if ((_seqByState[code] ?? 0) < n) _seqByState[code] = n;
         }
       }
@@ -88,15 +124,32 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
   @override
   Future<void> loginAs(DemoUser user) async {
     _current = user;
-    _audit.add(AuditEntry(
-      id: _uuid.v4(),
-      actorId: user.id,
-      action: 'login',
-      entity: 'profile',
-      entityId: user.id,
-      createdAt: DateTime.now(),
-    ));
     notifyListeners();
+  }
+
+  @override
+  Future<DemoUser> registerMemberAccount({
+    required String fullName,
+    required String phone,
+    String? email,
+  }) async {
+    final existing = _users.where((u) => u.phone == phone).firstOrNull;
+    if (existing != null) {
+      _current = existing;
+      notifyListeners();
+      return existing;
+    }
+    final user = DemoUser(
+      id: _uuid.v4(),
+      phone: phone,
+      fullName: fullName,
+      role: AppRoles.member,
+      email: email,
+    );
+    _users.add(user);
+    _current = user;
+    notifyListeners();
+    return user;
   }
 
   @override
@@ -106,21 +159,36 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
   }
 
   @override
-  List<Member> members({
-    String? status,
-    String? registeredBy,
-    String? stateId,
-    String? lgaId,
-    String? wardId,
-    String? category,
-  }) {
+  List<Member> members({MemberFilters filters = const MemberFilters()}) {
+    final q = filters.query?.trim().toLowerCase();
     return _members.where((m) {
-      if (status != null && m.status != status) return false;
-      if (registeredBy != null && m.registeredBy != registeredBy) return false;
-      if (stateId != null && m.stateId != stateId) return false;
-      if (lgaId != null && m.lgaId != lgaId) return false;
-      if (wardId != null && m.wardId != wardId) return false;
-      if (category != null && m.category != category) return false;
+      if (filters.status != null && m.status != filters.status) return false;
+      if (filters.stateId != null && m.stateId != filters.stateId) return false;
+      if (filters.lgaId != null && m.lgaId != filters.lgaId) return false;
+      if (filters.wardId != null && m.wardId != filters.wardId) return false;
+      if (filters.pollingUnitId != null && m.pollingUnitId != filters.pollingUnitId) return false;
+      if (filters.gender != null && m.gender != filters.gender) return false;
+      if (filters.occupation != null &&
+          filters.occupation!.isNotEmpty &&
+          !(m.occupation ?? '').toLowerCase().contains(filters.occupation!.toLowerCase())) {
+        return false;
+      }
+      if (filters.ageMin != null && (m.age == null || m.age! < filters.ageMin!)) return false;
+      if (filters.ageMax != null && (m.age == null || m.age! > filters.ageMax!)) return false;
+      if (filters.registeredFrom != null && m.createdAt.isBefore(filters.registeredFrom!)) return false;
+      if (filters.registeredTo != null && m.createdAt.isAfter(filters.registeredTo!.add(const Duration(days: 1)))) {
+        return false;
+      }
+      if (q != null && q.isNotEmpty) {
+        final hay = [
+          m.fullName,
+          m.phone ?? '',
+          m.membershipNumber ?? '',
+          m.vin ?? '',
+          m.email ?? '',
+        ].join(' ').toLowerCase();
+        if (!hay.contains(q)) return false;
+      }
       return true;
     }).toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
@@ -136,96 +204,85 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
   }
 
   @override
-  MembershipStats stats({String? stateId, String? lgaId, String? wardId, String? registeredBy}) {
-    final list = members(stateId: stateId, lgaId: lgaId, wardId: wardId, registeredBy: registeredBy);
+  Member? memberForCurrentUser() {
+    final u = _current;
+    if (u == null || u.role != AppRoles.member) return null;
+    if (u.memberId != null) {
+      final byId = findMember(u.memberId!);
+      if (byId != null) return byId;
+    }
+    try {
+      return _members.firstWhere((m) => m.userId == u.id || m.phone == u.phone);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  MembershipStats stats() {
+    final list = _members;
+    var lgas = 0, wards = 0, pus = 0;
+    for (final s in _states) {
+      lgas += s.lgas.length;
+      for (final l in s.lgas) {
+        wards += l.wards.length;
+        for (final w in l.wards) {
+          pus += w.pollingUnits.length;
+        }
+      }
+    }
     return MembershipStats(
-      registered: list.length,
+      total: list.length,
       pending: list.where((m) => m.status == MemberStatus.pending).length,
       approved: list.where((m) => m.status == MemberStatus.approved).length,
       rejected: list.where((m) => m.status == MemberStatus.rejected).length,
-      agents: agents(stateId: stateId, lgaId: lgaId, wardId: wardId).length,
       states: _states.length,
-      lgas: stateId == null
-          ? _states.fold<int>(0, (a, s) => a + s.lgas.length)
-          : (findState(stateId)?.lgas.length ?? 0),
-      wards: lgaId != null
-          ? (findLga(lgaId)?.wards.length ?? 0)
-          : stateId != null
-              ? (findState(stateId)?.lgas.fold<int>(0, (a, l) => a + l.wards.length) ?? 0)
-              : _states.fold<int>(0, (a, s) => a + s.lgas.fold<int>(0, (b, l) => b + l.wards.length)),
+      lgas: lgas,
+      wards: wards,
+      pollingUnits: pus,
     );
   }
-
-  @override
-  List<DemoUser> agents({String? stateId, String? lgaId, String? wardId}) {
-    return _users.where((u) {
-      if (u.role != AppRoles.registrationAgent) return false;
-      if (stateId != null && u.stateId != stateId) return false;
-      if (lgaId != null && u.lgaId != lgaId) return false;
-      if (wardId != null && u.wardId != wardId) return false;
-      return true;
-    }).toList();
-  }
-
-  @override
-  List<ApprovalRecord> approvalsFor(String memberId) =>
-      _approvals.where((a) => a.memberId == memberId).toList();
-
-  @override
-  List<AppMessage> messages() => List.unmodifiable(_messages.reversed);
-
-  @override
-  List<AuditEntry> auditLog() => List.unmodifiable(_audit.reversed);
-
-  @override
-  List<SyncQueueItem> syncQueue() => hive.syncQueue();
-
-  @override
-  List<Map<String, dynamic>> drafts() => hive.allDrafts();
 
   @override
   Future<Member> submitMember(Member member, {bool offline = false}) async {
     final m = Member(
       id: member.id.isEmpty ? _uuid.v4() : member.id,
-      memberCode: member.memberCode,
+      membershipNumber: null,
       fullName: member.fullName,
       gender: member.gender,
       dateOfBirth: member.dateOfBirth,
-      phone: member.phone,
+      phone: member.phone ?? _current?.phone,
+      email: member.email ?? _current?.email,
       occupation: member.occupation,
-      education: member.education,
-      category: member.category,
       status: MemberStatus.pending,
       stateId: member.stateId,
       lgaId: member.lgaId,
       wardId: member.wardId,
-      communityId: member.communityId,
+      pollingUnitId: member.pollingUnitId,
+      isRegisteredVoter: member.isRegisteredVoter,
+      vin: member.vin,
+      voterCardUrl: member.voterCardUrl,
       photoUrl: member.photoUrl,
-      idDocumentUrl: member.idDocumentUrl,
-      registeredBy: _current?.id ?? member.registeredBy,
       createdAt: DateTime.now(),
       stateName: member.stateName,
       lgaName: member.lgaName,
       wardName: member.wardName,
-      communityName: member.communityName,
+      pollingUnitName: member.pollingUnitName,
+      userId: _current?.id ?? member.userId,
     );
-    _members.insert(0, m);
-    _approvals.add(ApprovalRecord(
-      id: _uuid.v4(),
-      memberId: m.id,
-      actorId: _current?.id,
-      action: 'submitted',
-      notes: 'Registration submitted',
-      createdAt: DateTime.now(),
-    ));
-    _audit.add(AuditEntry(
-      id: _uuid.v4(),
-      actorId: _current?.id,
-      action: 'member_submit',
-      entity: 'member',
-      entityId: m.id,
-      createdAt: DateTime.now(),
-    ));
+    final existingIdx = _members.indexWhere((x) => x.userId == m.userId || (m.phone != null && x.phone == m.phone));
+    if (existingIdx >= 0) {
+      _members[existingIdx] = m;
+    } else {
+      _members.insert(0, m);
+    }
+    if (_current != null && _current!.role == AppRoles.member) {
+      final ui = _users.indexWhere((u) => u.id == _current!.id);
+      if (ui >= 0) {
+        _users[ui] = _users[ui].copyWith(memberId: m.id, fullName: m.fullName, email: m.email);
+        _current = _users[ui];
+      }
+    }
     if (offline) {
       await hive.enqueue(SyncQueueItem(
         id: _uuid.v4(),
@@ -239,6 +296,30 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
   }
 
   @override
+  Future<Member> updateMemberProfile(
+    String memberId, {
+    String? fullName,
+    String? phone,
+    String? email,
+    String? occupation,
+    String? photoUrl,
+  }) async {
+    final idx = _members.indexWhere((m) => m.id == memberId);
+    if (idx < 0) throw StateError('Member not found');
+    final cur = _members[idx];
+    final updated = cur.copyWith(
+      fullName: fullName,
+      phone: phone,
+      email: email,
+      occupation: occupation,
+      photoUrl: photoUrl,
+    );
+    _members[idx] = updated;
+    notifyListeners();
+    return updated;
+  }
+
+  @override
   Future<void> saveDraft(String key, Map<String, dynamic> data) => hive.saveDraft(key, data);
 
   @override
@@ -247,22 +328,15 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
     if (idx < 0) throw StateError('Member not found');
     final cur = _members[idx];
     final st = findState(cur.stateId ?? '');
-    final code = nextMemberCode(st?.code ?? 'NW');
+    final code = nextMembershipNumber(st?.code ?? 'NW');
     final updated = cur.copyWith(
       status: MemberStatus.approved,
-      memberCode: code,
+      membershipNumber: code,
       approvedBy: _current?.id,
       approvedAt: DateTime.now(),
+      clearRejection: true,
     );
     _members[idx] = updated;
-    _approvals.add(ApprovalRecord(
-      id: _uuid.v4(),
-      memberId: memberId,
-      actorId: _current?.id,
-      action: 'approved',
-      notes: note,
-      createdAt: DateTime.now(),
-    ));
     notifyListeners();
     return updated;
   }
@@ -274,39 +348,12 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
     final updated = _members[idx].copyWith(
       status: MemberStatus.rejected,
       rejectionReason: reason,
+      rejectedAt: DateTime.now(),
       approvedBy: _current?.id,
-      approvedAt: DateTime.now(),
     );
     _members[idx] = updated;
-    _approvals.add(ApprovalRecord(
-      id: _uuid.v4(),
-      memberId: memberId,
-      actorId: _current?.id,
-      action: 'rejected',
-      notes: reason,
-      createdAt: DateTime.now(),
-    ));
     notifyListeners();
     return updated;
-  }
-
-  @override
-  Future<AppMessage> sendMessage({
-    required String audienceScope,
-    String? audienceRef,
-    required String body,
-  }) async {
-    final msg = AppMessage(
-      id: _uuid.v4(),
-      audienceScope: audienceScope,
-      audienceRef: audienceRef,
-      body: body,
-      sentBy: _current?.id,
-      createdAt: DateTime.now(),
-    );
-    _messages.add(msg);
-    notifyListeners();
-    return msg;
   }
 
   @override
@@ -318,6 +365,12 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
     notifyListeners();
     return q.length;
   }
+
+  @override
+  List<SyncQueueItem> syncQueue() => hive.syncQueue();
+
+  @override
+  List<Map<String, dynamic>> drafts() => hive.allDrafts();
 
   @override
   StateGeo? findState(String id) {
@@ -351,42 +404,23 @@ class DemoRepository extends ChangeNotifier implements MembershipRepository {
   }
 
   @override
-  ({StateGeo state, LgaGeo lga, WardGeo ward, CommunityGeo? community})? resolveLocation({
-    String? stateId,
-    String? lgaId,
-    String? wardId,
-    String? communityId,
-  }) {
-    if (stateId == null || lgaId == null || wardId == null) return null;
-    final state = findState(stateId);
-    final lga = findLga(lgaId);
-    final ward = findWard(wardId);
-    if (state == null || lga == null || ward == null) return null;
-    CommunityGeo? community;
-    if (communityId != null) {
-      try {
-        community = ward.communities.firstWhere((c) => c.id == communityId);
-      } catch (_) {}
+  PollingUnitGeo? findPollingUnit(String id) {
+    for (final s in _states) {
+      for (final l in s.lgas) {
+        for (final w in l.wards) {
+          for (final p in w.pollingUnits) {
+            if (p.id == id) return p;
+          }
+        }
+      }
     }
-    return (state: state, lga: lga, ward: ward, community: community);
+    return null;
   }
 
   @override
-  String nextMemberCode(String stateCode) {
-    final n = (_seqByState[stateCode] ?? 10000) + 1;
+  String nextMembershipNumber(String stateCode) {
+    final n = (_seqByState[stateCode] ?? 100000) + 1;
     _seqByState[stateCode] = n;
-    return 'CBM-NW-$stateCode-${n.toString().padLeft(5, '0')}';
-  }
-
-  @override
-  void addListener(void Function() listener) {
-    _listeners.add(listener);
-    super.addListener(listener);
-  }
-
-  @override
-  void removeListener(void Function() listener) {
-    _listeners.remove(listener);
-    super.removeListener(listener);
+    return 'CBM-NW-$stateCode-${n.toString().padLeft(6, '0')}';
   }
 }

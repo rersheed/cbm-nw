@@ -49,6 +49,9 @@ class MembershipCardScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 8),
+                Text(AppConstants.brandName, style: TextStyle(color: Colors.white.withValues(alpha: 0.95), fontWeight: FontWeight.w800)),
+                Text(AppConstants.zoneLabel, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 12)),
                 const SizedBox(height: 18),
                 Row(
                   children: [
@@ -68,11 +71,9 @@ class MembershipCardScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(m.fullName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 20)),
-                          const SizedBox(height: 4),
-                          Text(MemberCategory.label(m.category), style: TextStyle(color: Colors.white.withValues(alpha: 0.9))),
                           const SizedBox(height: 8),
                           Text(
-                            m.memberCode ?? 'Pending ID',
+                            m.membershipNumber ?? 'Pending ID',
                             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, letterSpacing: 0.5),
                           ),
                         ],
@@ -81,21 +82,23 @@ class MembershipCardScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 18),
-                Text('${m.stateName ?? ''} · ${m.lgaName ?? ''} · ${m.wardName ?? ''}',
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 12)),
+                Text(
+                  '${m.stateName ?? ''} · ${m.lgaName ?? ''} · ${m.wardName ?? ''} · ${m.pollingUnitName ?? ''}',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 12),
+                ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
                     Expanded(
-                      child: Text('City Boy Movement', style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontWeight: FontWeight.w700)),
+                      child: Text(
+                        'QR shows basic info only\n(no VIN / voter card)',
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 11, height: 1.3),
+                      ),
                     ),
                     Container(
                       width: 64,
                       height: 64,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
                       child: const Icon(Icons.qr_code_2, size: 48, color: ApcColors.ink),
                     ),
                   ],
@@ -104,6 +107,33 @@ class MembershipCardScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 18),
+          SoftCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                GradientCtaButton(
+                  label: 'Download card (stub)',
+                  icon: Icons.download_rounded,
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Download stub — card image export coming soon')),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Share stub — system share sheet coming soon')),
+                    );
+                  },
+                  icon: const Icon(Icons.share_outlined),
+                  label: const Text('Share card (stub)'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
           SoftCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
