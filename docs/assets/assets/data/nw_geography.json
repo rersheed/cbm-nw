@@ -1,0 +1,2095 @@
+[
+  {
+    "id": "jg",
+    "name": "Jigawa",
+    "code": "JG",
+    "lgas": [
+      {
+        "id": "jg-auyo",
+        "name": "Auyo",
+        "code": "AUYO",
+        "wards": [
+          {
+            "id": "jg-auyo-auyakayi",
+            "name": "Auyakayi",
+            "code": "AUYAKAYI",
+            "communities": [
+              {
+                "id": "jg-auyo-auyakayi-c01",
+                "name": "Auyakayi Auyakayi",
+                "code": "C01"
+              },
+              {
+                "id": "jg-auyo-auyakayi-c02",
+                "name": "Kudigin Kudigin",
+                "code": "C02"
+              },
+              {
+                "id": "jg-auyo-auyakayi-c03",
+                "name": "Akubushin Akubishin",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "jg-auyo-auyo",
+            "name": "Auyo",
+            "code": "AUYO",
+            "communities": [
+              {
+                "id": "jg-auyo-auyo-c01",
+                "name": "Auyo Auyo Kuka",
+                "code": "C01"
+              },
+              {
+                "id": "jg-auyo-auyo-c02",
+                "name": "Auyo Vetnary Vetnary",
+                "code": "C02"
+              },
+              {
+                "id": "jg-auyo-auyo-c03",
+                "name": "Auyo Bayi",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "jg-auyo-ayama",
+            "name": "Ayama",
+            "code": "AYAMA",
+            "communities": [
+              {
+                "id": "jg-auyo-ayama-c01",
+                "name": "Ayama Ayama I",
+                "code": "C01"
+              },
+              {
+                "id": "jg-auyo-ayama-c02",
+                "name": "Ayama Ayama II",
+                "code": "C02"
+              },
+              {
+                "id": "jg-auyo-ayama-c03",
+                "name": "Anauya K Fada Anuaya",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "jg-babura",
+        "name": "Babura",
+        "code": "BABURA",
+        "wards": [
+          {
+            "id": "jg-babura-babura",
+            "name": "Babura",
+            "code": "BABURA",
+            "communities": [
+              {
+                "id": "jg-babura-babura-c01",
+                "name": "Arewa Babura Arewa I",
+                "code": "C01"
+              },
+              {
+                "id": "jg-babura-babura-c02",
+                "name": "Arewa Babura Arewa II",
+                "code": "C02"
+              },
+              {
+                "id": "jg-babura-babura-c03",
+                "name": "Gabas Babura Gabas I",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "jg-babura-batali",
+            "name": "Batali",
+            "code": "BATALI",
+            "communities": [
+              {
+                "id": "jg-babura-batali-c01",
+                "name": "Batali Batali",
+                "code": "C01"
+              },
+              {
+                "id": "jg-babura-batali-c02",
+                "name": "Gangara Gangara Hanware",
+                "code": "C02"
+              },
+              {
+                "id": "jg-babura-batali-c03",
+                "name": "Hammadi Hammadi",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "jg-babura-dorawa",
+            "name": "Dorawa",
+            "code": "DORAWA",
+            "communities": [
+              {
+                "id": "jg-babura-dorawa-c01",
+                "name": "Ajjah Gari Ajjah Gari",
+                "code": "C01"
+              },
+              {
+                "id": "jg-babura-dorawa-c02",
+                "name": "Danmakeri Danmakeri",
+                "code": "C02"
+              },
+              {
+                "id": "jg-babura-dorawa-c03",
+                "name": "Dorawa Dorawa",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "jg-birnin-kudu",
+        "name": "Birnin Kudu",
+        "code": "BIRNIN-KUDU",
+        "wards": [
+          {
+            "id": "jg-birnin-kudu-birnin-kudu",
+            "name": "Birnin Kudu",
+            "code": "BIRNIN-K",
+            "communities": [
+              {
+                "id": "jg-birnin-kudu-birnin-kudu-c01",
+                "name": "Dutsawa Habude Kantudu B Rijiya",
+                "code": "C01"
+              },
+              {
+                "id": "jg-birnin-kudu-birnin-kudu-c02",
+                "name": "Dutsawa G Hassan Guga",
+                "code": "C02"
+              },
+              {
+                "id": "jg-birnin-kudu-birnin-kudu-c03",
+                "name": "Magajin Gari Sps Ciki",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "jg-birnin-kudu-kangire",
+            "name": "Kangire",
+            "code": "KANGIRE",
+            "communities": [
+              {
+                "id": "jg-birnin-kudu-kangire-c01",
+                "name": "Kangire Yamma Arewa Kangire P S",
+                "code": "C01"
+              },
+              {
+                "id": "jg-birnin-kudu-kangire-c02",
+                "name": "Gwala Gwala",
+                "code": "C02"
+              },
+              {
+                "id": "jg-birnin-kudu-kangire-c03",
+                "name": "Kangire Gabas Kangire Fili",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "jg-birnin-kudu-kantoga",
+            "name": "Kantoga",
+            "code": "KANTOGA",
+            "communities": [
+              {
+                "id": "jg-birnin-kudu-kantoga-c01",
+                "name": "Kantoga Gari Kantoga P S",
+                "code": "C01"
+              },
+              {
+                "id": "jg-birnin-kudu-kantoga-c02",
+                "name": "Kantoga Gorawa Kantoga P School",
+                "code": "C02"
+              },
+              {
+                "id": "jg-birnin-kudu-kantoga-c03",
+                "name": "Ung Galadima Wudilawa Ung Galadima P Sch",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "jg-birniwa",
+        "name": "Birniwa",
+        "code": "BIRNIWA",
+        "wards": [
+          {
+            "id": "jg-birniwa-batu",
+            "name": "Batu",
+            "code": "BATU",
+            "communities": [
+              {
+                "id": "jg-birniwa-batu-c01",
+                "name": "Batu Batu Gari Fulani",
+                "code": "C01"
+              },
+              {
+                "id": "jg-birniwa-batu-c02",
+                "name": "Batu Dispensary Batu Kokomari Ilallah",
+                "code": "C02"
+              },
+              {
+                "id": "jg-birniwa-batu-c03",
+                "name": "Kuka In Kiwa Kuka In Kiwa",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "jg-birniwa-birniwa",
+            "name": "Birniwa",
+            "code": "BIRNIWA",
+            "communities": [
+              {
+                "id": "jg-birniwa-birniwa-c01",
+                "name": "Kofar Fada Brniwa Kofar Fada",
+                "code": "C01"
+              },
+              {
+                "id": "jg-birniwa-birniwa-c02",
+                "name": "Birniwa Kotar Fada A1a",
+                "code": "C02"
+              },
+              {
+                "id": "jg-birniwa-birniwa-c03",
+                "name": "Birniwa Spe Birniwa K Fada",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "jg-birniwa-dangwaleri",
+            "name": "Dangwaleri",
+            "code": "DANGWALE",
+            "communities": [
+              {
+                "id": "jg-birniwa-dangwaleri-c01",
+                "name": "Dangwaleri Dangwaleri D Bula",
+                "code": "C01"
+              },
+              {
+                "id": "jg-birniwa-dangwaleri-c02",
+                "name": "Dangwaleri Dungumbula Bula",
+                "code": "C02"
+              },
+              {
+                "id": "jg-birniwa-dangwaleri-c03",
+                "name": "Kubuna Kubuna Babba K K",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "kd",
+    "name": "Kaduna",
+    "code": "KD",
+    "lgas": [
+      {
+        "id": "kd-birnin-gwari",
+        "name": "Birnin-Gwari",
+        "code": "BIRNIN-GWARI",
+        "wards": [
+          {
+            "id": "kd-birnin-gwari-dogon-dawa",
+            "name": "Dogon Dawa",
+            "code": "DOGON-DA",
+            "communities": [
+              {
+                "id": "kd-birnin-gwari-dogon-dawa-c01",
+                "name": "K M Kwasau",
+                "code": "C01"
+              },
+              {
+                "id": "kd-birnin-gwari-dogon-dawa-c02",
+                "name": "K G Alhaji Shehu",
+                "code": "C02"
+              },
+              {
+                "id": "kd-birnin-gwari-dogon-dawa-c03",
+                "name": "Dogon Dawa Pry School I",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kd-birnin-gwari-gayam",
+            "name": "Gayam",
+            "code": "GAYAM",
+            "communities": [
+              {
+                "id": "kd-birnin-gwari-gayam-c01",
+                "name": "Gayam Pry School",
+                "code": "C01"
+              },
+              {
+                "id": "kd-birnin-gwari-gayam-c02",
+                "name": "Health Clinic Gayam",
+                "code": "C02"
+              },
+              {
+                "id": "kd-birnin-gwari-gayam-c03",
+                "name": "Kwaga Pry School",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kd-birnin-gwari-kakangi",
+            "name": "Kakangi",
+            "code": "KAKANGI",
+            "communities": [
+              {
+                "id": "kd-birnin-gwari-kakangi-c01",
+                "name": "Kakangi Pry School",
+                "code": "C01"
+              },
+              {
+                "id": "kd-birnin-gwari-kakangi-c02",
+                "name": "Dispensary",
+                "code": "C02"
+              },
+              {
+                "id": "kd-birnin-gwari-kakangi-c03",
+                "name": "Ung Ishiwai",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kd-chikun",
+        "name": "Chikun",
+        "code": "CHIKUN",
+        "wards": [
+          {
+            "id": "kd-chikun-chikun",
+            "name": "Chikun",
+            "code": "CHIKUN",
+            "communities": [
+              {
+                "id": "kd-chikun-chikun-c01",
+                "name": "Chikun L E A Pry School",
+                "code": "C01"
+              },
+              {
+                "id": "kd-chikun-chikun-c02",
+                "name": "Chikun Hausa L E A Pry School",
+                "code": "C02"
+              },
+              {
+                "id": "kd-chikun-chikun-c03",
+                "name": "Kunfara K G Sarki",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kd-chikun-gwagwada",
+            "name": "Gwagwada",
+            "code": "GWAGWADA",
+            "communities": [
+              {
+                "id": "kd-chikun-gwagwada-c01",
+                "name": "Gwagwada Pry School",
+                "code": "C01"
+              },
+              {
+                "id": "kd-chikun-gwagwada-c02",
+                "name": "Kabarasha Ung Turai",
+                "code": "C02"
+              },
+              {
+                "id": "kd-chikun-gwagwada-c03",
+                "name": "Gwanzunu Gwanzunu",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kd-chikun-kakau",
+            "name": "Kakau",
+            "code": "KAKAU",
+            "communities": [
+              {
+                "id": "kd-chikun-kakau-c01",
+                "name": "Kakau Station L E A Pry School",
+                "code": "C01"
+              },
+              {
+                "id": "kd-chikun-kakau-c02",
+                "name": "Kakau Station K G Sarki",
+                "code": "C02"
+              },
+              {
+                "id": "kd-chikun-kakau-c03",
+                "name": "Ung Sauri L E A Pry School",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kd-giwa",
+        "name": "Giwa",
+        "code": "GIWA",
+        "wards": [
+          {
+            "id": "kd-giwa-danmahawayi",
+            "name": "Danmahawayi",
+            "code": "DANMAHAW",
+            "communities": [
+              {
+                "id": "kd-giwa-danmahawayi-c01",
+                "name": "Danmahawayi I II Dispensary Hospital D M",
+                "code": "C01"
+              },
+              {
+                "id": "kd-giwa-danmahawayi-c02",
+                "name": "Ung Ganuwa I II L E A Ung Ganuwa",
+                "code": "C02"
+              },
+              {
+                "id": "kd-giwa-danmahawayi-c03",
+                "name": "Kuringa I II Jangefe I II L E A Ung Ganu",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kd-giwa-galadimawa",
+            "name": "Galadimawa",
+            "code": "GALADIMA",
+            "communities": [
+              {
+                "id": "kd-giwa-galadimawa-c01",
+                "name": "Galadimawa I Kofar Gida Abdulawa",
+                "code": "C01"
+              },
+              {
+                "id": "kd-giwa-galadimawa-c02",
+                "name": "Galadimawa II Kofar Gidan Sarki",
+                "code": "C02"
+              },
+              {
+                "id": "kd-giwa-galadimawa-c03",
+                "name": "Galadimawa III Tunburku Maje",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kd-giwa-gangara",
+            "name": "Gangara",
+            "code": "GANGARA",
+            "communities": [
+              {
+                "id": "kd-giwa-gangara-c01",
+                "name": "Ung S Gangara U Liman Gangara L E A Gang",
+                "code": "C01"
+              },
+              {
+                "id": "kd-giwa-gangara-c02",
+                "name": "U Madaki I Ung Madaki",
+                "code": "C02"
+              },
+              {
+                "id": "kd-giwa-gangara-c03",
+                "name": "U Beti Tsabtawa I II L E A U Beti Tsabta",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kd-igabi",
+        "name": "Igabi",
+        "code": "IGABI",
+        "wards": [
+          {
+            "id": "kd-igabi-afaka",
+            "name": "Afaka",
+            "code": "AFAKA",
+            "communities": [
+              {
+                "id": "kd-igabi-afaka-c01",
+                "name": "Afaka",
+                "code": "C01"
+              },
+              {
+                "id": "kd-igabi-afaka-c02",
+                "name": "Gidan Sarki I",
+                "code": "C02"
+              },
+              {
+                "id": "kd-igabi-afaka-c03",
+                "name": "Gidan Sarki II",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kd-igabi-birnin-yero",
+            "name": "Birnin Yero",
+            "code": "BIRNIN-Y",
+            "communities": [
+              {
+                "id": "kd-igabi-birnin-yero-c01",
+                "name": "Birnin Yero Gari",
+                "code": "C01"
+              },
+              {
+                "id": "kd-igabi-birnin-yero-c02",
+                "name": "Danbaba",
+                "code": "C02"
+              },
+              {
+                "id": "kd-igabi-birnin-yero-c03",
+                "name": "Ung Madaki",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kd-igabi-gadan-gayan",
+            "name": "Gadan Gayan",
+            "code": "GADAN-GA",
+            "communities": [
+              {
+                "id": "kd-igabi-gadan-gayan-c01",
+                "name": "Ung Lalle",
+                "code": "C01"
+              },
+              {
+                "id": "kd-igabi-gadan-gayan-c02",
+                "name": "Ung Umar",
+                "code": "C02"
+              },
+              {
+                "id": "kd-igabi-gadan-gayan-c03",
+                "name": "Kwankwani",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "kn",
+    "name": "Kano",
+    "code": "KN",
+    "lgas": [
+      {
+        "id": "kn-ajingi",
+        "name": "Ajingi",
+        "code": "AJINGI",
+        "wards": [
+          {
+            "id": "kn-ajingi-ajingi",
+            "name": "Ajingi",
+            "code": "AJINGI",
+            "communities": [
+              {
+                "id": "kn-ajingi-ajingi-c01",
+                "name": "Dugwal Near H H House I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-ajingi-ajingi-c02",
+                "name": "Dugwa Near H H House II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-ajingi-ajingi-c03",
+                "name": "Kumawa Bori Near W H House",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kn-ajingi-balare",
+            "name": "Balare",
+            "code": "BALARE",
+            "communities": [
+              {
+                "id": "kn-ajingi-balare-c01",
+                "name": "Anchacha Kaudai Kaudai Road Side Road",
+                "code": "C01"
+              },
+              {
+                "id": "kn-ajingi-balare-c02",
+                "name": "Balare Gabas Balare P S I",
+                "code": "C02"
+              },
+              {
+                "id": "kn-ajingi-balare-c03",
+                "name": "Balare Gabas Balare P S II",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kn-ajingi-chula",
+            "name": "Chula",
+            "code": "CHULA",
+            "communities": [
+              {
+                "id": "kn-ajingi-chula-c01",
+                "name": "Chula C Gari Ps I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-ajingi-chula-c02",
+                "name": "Chula C Gari Ps II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-ajingi-chula-c03",
+                "name": "Chula C Gari Ps III",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kn-albasu",
+        "name": "Albasu",
+        "code": "ALBASU",
+        "wards": [
+          {
+            "id": "kn-albasu-albasu-central",
+            "name": "Albasu Central",
+            "code": "ALBASU-C",
+            "communities": [
+              {
+                "id": "kn-albasu-albasu-central-c01",
+                "name": "Badawa Women Central Albasu I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-albasu-albasu-central-c02",
+                "name": "Badawa Women Central Albasu II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-albasu-albasu-central-c03",
+                "name": "Jemo",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kn-albasu-bataiya",
+            "name": "Bataiya",
+            "code": "BATAIYA",
+            "communities": [
+              {
+                "id": "kn-albasu-bataiya-c01",
+                "name": "Bataiya Gari Bataya P S I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-albasu-bataiya-c02",
+                "name": "Bataiya Gari Bataya P S II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-albasu-bataiya-c03",
+                "name": "Baura",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kn-albasu-chamarana",
+            "name": "Chamarana",
+            "code": "CHAMARAN",
+            "communities": [
+              {
+                "id": "kn-albasu-chamarana-c01",
+                "name": "Chamarana Gari I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-albasu-chamarana-c02",
+                "name": "Chamarana Gari II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-albasu-chamarana-c03",
+                "name": "Duja I",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kn-bagwai",
+        "name": "Bagwai",
+        "code": "BAGWAI",
+        "wards": [
+          {
+            "id": "kn-bagwai-bagwai",
+            "name": "Bagwai",
+            "code": "BAGWAI",
+            "communities": [
+              {
+                "id": "kn-bagwai-bagwai-c01",
+                "name": "Daddauda C Gari I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-bagwai-bagwai-c02",
+                "name": "Daddauda C Gari II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-bagwai-bagwai-c03",
+                "name": "Gargari I",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kn-bagwai-dangada",
+            "name": "Dangada",
+            "code": "DANGADA",
+            "communities": [
+              {
+                "id": "kn-bagwai-dangada-c01",
+                "name": "Dangada C Gari I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-bagwai-dangada-c02",
+                "name": "Dangada C Gari II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-bagwai-dangada-c03",
+                "name": "Rigar Dadi",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kn-bagwai-gadanya",
+            "name": "Gadanya",
+            "code": "GADANYA",
+            "communities": [
+              {
+                "id": "kn-bagwai-gadanya-c01",
+                "name": "Daneji",
+                "code": "C01"
+              },
+              {
+                "id": "kn-bagwai-gadanya-c02",
+                "name": "Daganya Karofi I",
+                "code": "C02"
+              },
+              {
+                "id": "kn-bagwai-gadanya-c03",
+                "name": "Daganya Karofi II",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kn-bebeji",
+        "name": "Bebeji",
+        "code": "BEBEJI",
+        "wards": [
+          {
+            "id": "kn-bebeji-anadariya",
+            "name": "Anadariya",
+            "code": "ANADARIY",
+            "communities": [
+              {
+                "id": "kn-bebeji-anadariya-c01",
+                "name": "Anadariya Cikin Gari I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-bebeji-anadariya-c02",
+                "name": "Anadariya Cikin Gari II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-bebeji-anadariya-c03",
+                "name": "Tashar Mara I",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kn-bebeji-baguda",
+            "name": "Baguda",
+            "code": "BAGUDA",
+            "communities": [
+              {
+                "id": "kn-bebeji-baguda-c01",
+                "name": "Baguda C Gari I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-bebeji-baguda-c02",
+                "name": "Baguda C Gari II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-bebeji-baguda-c03",
+                "name": "Dukawa",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kn-bebeji-bebeji",
+            "name": "Bebeji",
+            "code": "BEBEJI",
+            "communities": [
+              {
+                "id": "kn-bebeji-bebeji-c01",
+                "name": "Bebeji Cikin Gari I",
+                "code": "C01"
+              },
+              {
+                "id": "kn-bebeji-bebeji-c02",
+                "name": "Bebeji Cikin Gari II",
+                "code": "C02"
+              },
+              {
+                "id": "kn-bebeji-bebeji-c03",
+                "name": "Bebeji Cikin Gari III",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "kt",
+    "name": "Katsina",
+    "code": "KT",
+    "lgas": [
+      {
+        "id": "kt-bakori",
+        "name": "Bakori",
+        "code": "BAKORI",
+        "wards": [
+          {
+            "id": "kt-bakori-bakori-a",
+            "name": "Bakori A",
+            "code": "BAKORI-A",
+            "communities": [
+              {
+                "id": "kt-bakori-bakori-a-c01",
+                "name": "Bakori Gari 1 Nadabo",
+                "code": "C01"
+              },
+              {
+                "id": "kt-bakori-bakori-a-c02",
+                "name": "Bakori Gari II Nadabo",
+                "code": "C02"
+              },
+              {
+                "id": "kt-bakori-bakori-a-c03",
+                "name": "Bakori III K G Talban Bakori",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kt-bakori-bakori-b",
+            "name": "Bakori B",
+            "code": "BAKORI-B",
+            "communities": [
+              {
+                "id": "kt-bakori-bakori-b-c01",
+                "name": "Zage Zagi Zage Zagi",
+                "code": "C01"
+              },
+              {
+                "id": "kt-bakori-bakori-b-c02",
+                "name": "Zage Zagi Vetinery",
+                "code": "C02"
+              },
+              {
+                "id": "kt-bakori-bakori-b-c03",
+                "name": "Bakori Gari 1 Dispensary",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kt-bakori-barde-kwantakwaran",
+            "name": "Barde/kwantakwaran",
+            "code": "BARDE-KW",
+            "communities": [
+              {
+                "id": "kt-bakori-barde-kwantakwaran-c01",
+                "name": "Barde Barde",
+                "code": "C01"
+              },
+              {
+                "id": "kt-bakori-barde-kwantakwaran-c02",
+                "name": "Layin Mahauta K G Alh Nuhu",
+                "code": "C02"
+              },
+              {
+                "id": "kt-bakori-barde-kwantakwaran-c03",
+                "name": "Rafin Karo Gidin Cediya",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kt-batagarawa",
+        "name": "Batagarawa",
+        "code": "BATAGARAWA",
+        "wards": [
+          {
+            "id": "kt-batagarawa-ajiwa",
+            "name": "Ajiwa",
+            "code": "AJIWA",
+            "communities": [
+              {
+                "id": "kt-batagarawa-ajiwa-c01",
+                "name": "Barhin Shaiskawa Bahin Skw",
+                "code": "C01"
+              },
+              {
+                "id": "kt-batagarawa-ajiwa-c02",
+                "name": "Barhin Tudu Barhin Tudu",
+                "code": "C02"
+              },
+              {
+                "id": "kt-batagarawa-ajiwa-c03",
+                "name": "Barhin B Gida Barhin B Gida",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kt-batagarawa-bakiyawa",
+            "name": "Bakiyawa",
+            "code": "BAKIYAWA",
+            "communities": [
+              {
+                "id": "kt-batagarawa-bakiyawa-c01",
+                "name": "Intotsa Tashar Baluyawa",
+                "code": "C01"
+              },
+              {
+                "id": "kt-batagarawa-bakiyawa-c02",
+                "name": "Bakiyawa Gari Bak",
+                "code": "C02"
+              },
+              {
+                "id": "kt-batagarawa-bakiyawa-c03",
+                "name": "Kwaina Kwaina",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kt-batagarawa-barawa",
+            "name": "Barawa",
+            "code": "BARAWA",
+            "communities": [
+              {
+                "id": "kt-batagarawa-barawa-c01",
+                "name": "Barawa North Barawa N",
+                "code": "C01"
+              },
+              {
+                "id": "kt-batagarawa-barawa-c02",
+                "name": "Shibdawa Dispensary",
+                "code": "C02"
+              },
+              {
+                "id": "kt-batagarawa-barawa-c03",
+                "name": "Barawa Gari Kgmai Ung",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kt-batsari",
+        "name": "Batsari",
+        "code": "BATSARI",
+        "wards": [
+          {
+            "id": "kt-batsari-abadau-kagara",
+            "name": "Abadau/kagara",
+            "code": "ABADAU-K",
+            "communities": [
+              {
+                "id": "kt-batsari-abadau-kagara-c01",
+                "name": "Jataka Kg Maiunguwa",
+                "code": "C01"
+              },
+              {
+                "id": "kt-batsari-abadau-kagara-c02",
+                "name": "Abadau",
+                "code": "C02"
+              },
+              {
+                "id": "kt-batsari-abadau-kagara-c03",
+                "name": "Shirgi South Tv Centre",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kt-batsari-batsari",
+            "name": "Batsari",
+            "code": "BATSARI",
+            "communities": [
+              {
+                "id": "kt-batsari-batsari-c01",
+                "name": "Ung Sarki Tv Centre",
+                "code": "C01"
+              },
+              {
+                "id": "kt-batsari-batsari-c02",
+                "name": "Ung A Lawal Model",
+                "code": "C02"
+              },
+              {
+                "id": "kt-batsari-batsari-c03",
+                "name": "Ung Gwanda K G Mai Ung",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kt-batsari-dan-alh-yangaiya",
+            "name": "Dan. Alh/yangaiya",
+            "code": "DAN-ALH-",
+            "communities": [
+              {
+                "id": "kt-batsari-dan-alh-yangaiya-c01",
+                "name": "Yandaka T V Centre",
+                "code": "C01"
+              },
+              {
+                "id": "kt-batsari-dan-alh-yangaiya-c02",
+                "name": "Nasarawa K G M Ung",
+                "code": "C02"
+              },
+              {
+                "id": "kt-batsari-dan-alh-yangaiya-c03",
+                "name": "Tsaunin Goriba K G M Ung",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kt-baure",
+        "name": "Baure",
+        "code": "BAURE",
+        "wards": [
+          {
+            "id": "kt-baure-agala",
+            "name": "Agala",
+            "code": "AGALA",
+            "communities": [
+              {
+                "id": "kt-baure-agala-c01",
+                "name": "Dankum",
+                "code": "C01"
+              },
+              {
+                "id": "kt-baure-agala-c02",
+                "name": "Kafin Kwance",
+                "code": "C02"
+              },
+              {
+                "id": "kt-baure-agala-c03",
+                "name": "Agala Habe",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kt-baure-babban-mutum",
+            "name": "Babban Mutum",
+            "code": "BABBAN-M",
+            "communities": [
+              {
+                "id": "kt-baure-babban-mutum-c01",
+                "name": "Babban Mutum Galadima",
+                "code": "C01"
+              },
+              {
+                "id": "kt-baure-babban-mutum-c02",
+                "name": "B Mutum Usman Town Hall",
+                "code": "C02"
+              },
+              {
+                "id": "kt-baure-babban-mutum-c03",
+                "name": "B Mutum Ubandawaki T V Viewing Centre",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kt-baure-baure",
+            "name": "Baure",
+            "code": "BAURE",
+            "communities": [
+              {
+                "id": "kt-baure-baure-c01",
+                "name": "Baure Kofar Arewa Kofar Maigari",
+                "code": "C01"
+              },
+              {
+                "id": "kt-baure-baure-c02",
+                "name": "Baure Yamma Gidan Gona",
+                "code": "C02"
+              },
+              {
+                "id": "kt-baure-baure-c03",
+                "name": "Baure North",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "kb",
+    "name": "Kebbi",
+    "code": "KB",
+    "lgas": [
+      {
+        "id": "kb-aliero",
+        "name": "Aliero",
+        "code": "ALIERO",
+        "wards": [
+          {
+            "id": "kb-aliero-aliero-dangaladima-i",
+            "name": "Aliero Dangaladima I",
+            "code": "ALIERO-D",
+            "communities": [
+              {
+                "id": "kb-aliero-aliero-dangaladima-i-c01",
+                "name": "Barebari",
+                "code": "C01"
+              },
+              {
+                "id": "kb-aliero-aliero-dangaladima-i-c02",
+                "name": "Filin Ango",
+                "code": "C02"
+              },
+              {
+                "id": "kb-aliero-aliero-dangaladima-i-c03",
+                "name": "Filin Jangi",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kb-aliero-aliero-dangaladima-ii",
+            "name": "Aliero Dangaladima II",
+            "code": "ALIERO-D",
+            "communities": [
+              {
+                "id": "kb-aliero-aliero-dangaladima-ii-c01",
+                "name": "Gumbin Dari",
+                "code": "C01"
+              },
+              {
+                "id": "kb-aliero-aliero-dangaladima-ii-c02",
+                "name": "Ganda Samu",
+                "code": "C02"
+              },
+              {
+                "id": "kb-aliero-aliero-dangaladima-ii-c03",
+                "name": "Gomuzon Alierawa",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kb-aliero-aliero-s-fada-i",
+            "name": "Aliero S Fada I",
+            "code": "ALIERO-S",
+            "communities": [
+              {
+                "id": "kb-aliero-aliero-s-fada-i-c01",
+                "name": "Filin Bai",
+                "code": "C01"
+              },
+              {
+                "id": "kb-aliero-aliero-s-fada-i-c02",
+                "name": "Marina I",
+                "code": "C02"
+              },
+              {
+                "id": "kb-aliero-aliero-s-fada-i-c03",
+                "name": "Marina II",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kb-arewa-dandi",
+        "name": "Arewa-Dandi",
+        "code": "AREWA-DANDI",
+        "wards": [
+          {
+            "id": "kb-arewa-dandi-biu",
+            "name": "Biu",
+            "code": "BIU",
+            "communities": [
+              {
+                "id": "kb-arewa-dandi-biu-c01",
+                "name": "Asakara",
+                "code": "C01"
+              },
+              {
+                "id": "kb-arewa-dandi-biu-c02",
+                "name": "Biu Sabon Zama",
+                "code": "C02"
+              },
+              {
+                "id": "kb-arewa-dandi-biu-c03",
+                "name": "Biu S Gari",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kb-arewa-dandi-chibike",
+            "name": "Chibike",
+            "code": "CHIBIKE",
+            "communities": [
+              {
+                "id": "kb-arewa-dandi-chibike-c01",
+                "name": "Chibike",
+                "code": "C01"
+              },
+              {
+                "id": "kb-arewa-dandi-chibike-c02",
+                "name": "Chibike Illela",
+                "code": "C02"
+              },
+              {
+                "id": "kb-arewa-dandi-chibike-c03",
+                "name": "Dogon Daji",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kb-arewa-dandi-daura-sakkwabe-jarkuka",
+            "name": "Daura/sakkwabe/jarkuka",
+            "code": "DAURA-SA",
+            "communities": [
+              {
+                "id": "kb-arewa-dandi-daura-sakkwabe-jarkuka-c01",
+                "name": "Bachaka I",
+                "code": "C01"
+              },
+              {
+                "id": "kb-arewa-dandi-daura-sakkwabe-jarkuka-c02",
+                "name": "Botawa",
+                "code": "C02"
+              },
+              {
+                "id": "kb-arewa-dandi-daura-sakkwabe-jarkuka-c03",
+                "name": "Bachaka II",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kb-argungu",
+        "name": "Argungu",
+        "code": "ARGUNGU",
+        "wards": [
+          {
+            "id": "kb-argungu-alwasa-gotomo",
+            "name": "Alwasa/gotomo",
+            "code": "ALWASA-G",
+            "communities": [
+              {
+                "id": "kb-argungu-alwasa-gotomo-c01",
+                "name": "Alwasa Model",
+                "code": "C01"
+              },
+              {
+                "id": "kb-argungu-alwasa-gotomo-c02",
+                "name": "U Zumari",
+                "code": "C02"
+              },
+              {
+                "id": "kb-argungu-alwasa-gotomo-c03",
+                "name": "U Maifatu",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kb-argungu-dikko",
+            "name": "Dikko",
+            "code": "DIKKO",
+            "communities": [
+              {
+                "id": "kb-argungu-dikko-c01",
+                "name": "Model Dankoji I",
+                "code": "C01"
+              },
+              {
+                "id": "kb-argungu-dikko-c02",
+                "name": "Model Dankoji II",
+                "code": "C02"
+              },
+              {
+                "id": "kb-argungu-dikko-c03",
+                "name": "Garkar Baraya",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kb-argungu-felande",
+            "name": "Felande",
+            "code": "FELANDE",
+            "communities": [
+              {
+                "id": "kb-argungu-felande-c01",
+                "name": "Felande I",
+                "code": "C01"
+              },
+              {
+                "id": "kb-argungu-felande-c02",
+                "name": "Felande II",
+                "code": "C02"
+              },
+              {
+                "id": "kb-argungu-felande-c03",
+                "name": "Sabon Garin Kaduba",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kb-augie",
+        "name": "Augie",
+        "code": "AUGIE",
+        "wards": [
+          {
+            "id": "kb-augie-augie-north",
+            "name": "Augie North",
+            "code": "AUGIE-NO",
+            "communities": [
+              {
+                "id": "kb-augie-augie-north-c01",
+                "name": "Tsohon Garin Augie",
+                "code": "C01"
+              },
+              {
+                "id": "kb-augie-augie-north-c02",
+                "name": "Shiyar Amadu",
+                "code": "C02"
+              },
+              {
+                "id": "kb-augie-augie-north-c03",
+                "name": "Shiyar Taji I",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kb-augie-augie-south",
+            "name": "Augie South",
+            "code": "AUGIE-SO",
+            "communities": [
+              {
+                "id": "kb-augie-augie-south-c01",
+                "name": "Kasuwa Augie",
+                "code": "C01"
+              },
+              {
+                "id": "kb-augie-augie-south-c02",
+                "name": "Sabon Gari",
+                "code": "C02"
+              },
+              {
+                "id": "kb-augie-augie-south-c03",
+                "name": "Tungar Noma",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "kb-augie-bagaye-mera",
+            "name": "Bagaye/mera",
+            "code": "BAGAYE-M",
+            "communities": [
+              {
+                "id": "kb-augie-bagaye-mera-c01",
+                "name": "Bagaye",
+                "code": "C01"
+              },
+              {
+                "id": "kb-augie-bagaye-mera-c02",
+                "name": "Bagaye Garkar Noma",
+                "code": "C02"
+              },
+              {
+                "id": "kb-augie-bagaye-mera-c03",
+                "name": "Bagaye Garkar Sani",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "so",
+    "name": "Sokoto",
+    "code": "SO",
+    "lgas": [
+      {
+        "id": "so-binji",
+        "name": "Binji",
+        "code": "BINJI",
+        "wards": [
+          {
+            "id": "so-binji-binji",
+            "name": "Binji",
+            "code": "BINJI",
+            "communities": [
+              {
+                "id": "so-binji-binji-c01",
+                "name": "Shiyyar Ss Fawa",
+                "code": "C01"
+              },
+              {
+                "id": "so-binji-binji-c02",
+                "name": "Bajagawa",
+                "code": "C02"
+              },
+              {
+                "id": "so-binji-binji-c03",
+                "name": "Shiyar Darai Pry School Shiyar Darai",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "so-binji-bunkari",
+            "name": "Bunkari",
+            "code": "BUNKARI",
+            "communities": [
+              {
+                "id": "so-binji-bunkari-c01",
+                "name": "Shiyar Uban Dawaki Bunkari",
+                "code": "C01"
+              },
+              {
+                "id": "so-binji-bunkari-c02",
+                "name": "Shiyar Uban Dawaki Fili",
+                "code": "C02"
+              },
+              {
+                "id": "so-binji-bunkari-c03",
+                "name": "Shiyar Basharu Garkar Basharu",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "so-binji-gawazzai",
+            "name": "Gawazzai",
+            "code": "GAWAZZAI",
+            "communities": [
+              {
+                "id": "so-binji-gawazzai-c01",
+                "name": "Gawazzai",
+                "code": "C01"
+              },
+              {
+                "id": "so-binji-gawazzai-c02",
+                "name": "Banu Zumbu Hili Banu Zambu Bani Zumbu",
+                "code": "C02"
+              },
+              {
+                "id": "so-binji-gawazzai-c03",
+                "name": "Dunkuma Dunkuma",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "so-bodinga",
+        "name": "Bodinga",
+        "code": "BODINGA",
+        "wards": [
+          {
+            "id": "so-bodinga-badau-darhela",
+            "name": "Badau/darhela",
+            "code": "BADAU-DA",
+            "communities": [
+              {
+                "id": "so-bodinga-badau-darhela-c01",
+                "name": "Pry School Darhela",
+                "code": "C01"
+              },
+              {
+                "id": "so-bodinga-badau-darhela-c02",
+                "name": "Lungun Darhela P S",
+                "code": "C02"
+              },
+              {
+                "id": "so-bodinga-badau-darhela-c03",
+                "name": "Hilin Darhela Kaura",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "so-bodinga-bagarawa",
+            "name": "Bagarawa",
+            "code": "BAGARAWA",
+            "communities": [
+              {
+                "id": "so-bodinga-bagarawa-c01",
+                "name": "Model Pry School Shiyar Manu",
+                "code": "C01"
+              },
+              {
+                "id": "so-bodinga-bagarawa-c02",
+                "name": "Shiyar Hakimi Gugari",
+                "code": "C02"
+              },
+              {
+                "id": "so-bodinga-bagarawa-c03",
+                "name": "Pry School R Yarde",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "so-bodinga-bangi-dabaga",
+            "name": "Bangi/dabaga",
+            "code": "BANGI-DA",
+            "communities": [
+              {
+                "id": "so-bodinga-bangi-dabaga-c01",
+                "name": "Dabaga Pry School Shiyar Marafa",
+                "code": "C01"
+              },
+              {
+                "id": "so-bodinga-bangi-dabaga-c02",
+                "name": "Gidan Ajiya Shiyar Marafa",
+                "code": "C02"
+              },
+              {
+                "id": "so-bodinga-bangi-dabaga-c03",
+                "name": "Shiyar Hakimi Wuro Elde",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "so-dange-shuni",
+        "name": "Dange-Shuni",
+        "code": "DANGE-SHUNI",
+        "wards": [
+          {
+            "id": "so-dange-shuni-bodai-jurga",
+            "name": "Bodai/jurga",
+            "code": "BODAI-JU",
+            "communities": [
+              {
+                "id": "so-dange-shuni-bodai-jurga-c01",
+                "name": "Model Pry School Bodai Gabas",
+                "code": "C01"
+              },
+              {
+                "id": "so-dange-shuni-bodai-jurga-c02",
+                "name": "Farin Dutsi",
+                "code": "C02"
+              },
+              {
+                "id": "so-dange-shuni-bodai-jurga-c03",
+                "name": "Runjin Dubi",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "so-dange-shuni-dange",
+            "name": "Dange",
+            "code": "DANGE",
+            "communities": [
+              {
+                "id": "so-dange-shuni-dange-c01",
+                "name": "S Baura Nizzamiya",
+                "code": "C01"
+              },
+              {
+                "id": "so-dange-shuni-dange-c02",
+                "name": "Buide Bakin Titi",
+                "code": "C02"
+              },
+              {
+                "id": "so-dange-shuni-dange-c03",
+                "name": "Adarawa Adarawa",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "so-dange-shuni-fajaldu",
+            "name": "Fajaldu",
+            "code": "FAJALDU",
+            "communities": [
+              {
+                "id": "so-dange-shuni-fajaldu-c01",
+                "name": "Model Pry School Budude",
+                "code": "C01"
+              },
+              {
+                "id": "so-dange-shuni-fajaldu-c02",
+                "name": "Model Pry School Dabagi",
+                "code": "C02"
+              },
+              {
+                "id": "so-dange-shuni-fajaldu-c03",
+                "name": "Gonar Yari",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "so-gada",
+        "name": "Gada",
+        "code": "GADA",
+        "wards": [
+          {
+            "id": "so-gada-dukamaje-ilah",
+            "name": "Dukamaje/ilah",
+            "code": "DUKAMAJE",
+            "communities": [
+              {
+                "id": "so-gada-dukamaje-ilah-c01",
+                "name": "Ilah Gari Ilah Pry School",
+                "code": "C01"
+              },
+              {
+                "id": "so-gada-dukamaje-ilah-c02",
+                "name": "Tabanni Pry School",
+                "code": "C02"
+              },
+              {
+                "id": "so-gada-dukamaje-ilah-c03",
+                "name": "Tsagal Gale",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "so-gada-gada",
+            "name": "Gada",
+            "code": "GADA",
+            "communities": [
+              {
+                "id": "so-gada-gada-c01",
+                "name": "Shiyar Dan Marido",
+                "code": "C01"
+              },
+              {
+                "id": "so-gada-gada-c02",
+                "name": "Shiyar Sarkin Gada",
+                "code": "C02"
+              },
+              {
+                "id": "so-gada-gada-c03",
+                "name": "Safiyal Kaurawa",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "so-gada-gilbadi",
+            "name": "Gilbadi",
+            "code": "GILBADI",
+            "communities": [
+              {
+                "id": "so-gada-gilbadi-c01",
+                "name": "Gilbadi Gari Dispensary",
+                "code": "C01"
+              },
+              {
+                "id": "so-gada-gilbadi-c02",
+                "name": "Gidan Ada Dan Fili",
+                "code": "C02"
+              },
+              {
+                "id": "so-gada-gilbadi-c03",
+                "name": "Gidan Abdo Pry School",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "za",
+    "name": "Zamfara",
+    "code": "ZA",
+    "lgas": [
+      {
+        "id": "za-anka",
+        "name": "Anka",
+        "code": "ANKA",
+        "wards": [
+          {
+            "id": "za-anka-bagega",
+            "name": "Bagega",
+            "code": "BAGEGA",
+            "communities": [
+              {
+                "id": "za-anka-bagega-c01",
+                "name": "Bagega I Kanwuri",
+                "code": "C01"
+              },
+              {
+                "id": "za-anka-bagega-c02",
+                "name": "Bagega II Makaranta",
+                "code": "C02"
+              },
+              {
+                "id": "za-anka-bagega-c03",
+                "name": "Tubuki Garka",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "za-anka-barayar-zaki",
+            "name": "Barayar-zaki",
+            "code": "BARAYAR-",
+            "communities": [
+              {
+                "id": "za-anka-barayar-zaki-c01",
+                "name": "Barayar Zaki Kanwuri",
+                "code": "C01"
+              },
+              {
+                "id": "za-anka-barayar-zaki-c02",
+                "name": "Rafin Gero Kanwuri",
+                "code": "C02"
+              },
+              {
+                "id": "za-anka-barayar-zaki-c03",
+                "name": "Tungar Godai Gidan Hakimi",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "za-anka-dan-galadima",
+            "name": "Dan Galadima",
+            "code": "DAN-GALA",
+            "communities": [
+              {
+                "id": "za-anka-dan-galadima-c01",
+                "name": "J N I",
+                "code": "C01"
+              },
+              {
+                "id": "za-anka-dan-galadima-c02",
+                "name": "Dandambe Garkar Dandambe",
+                "code": "C02"
+              },
+              {
+                "id": "za-anka-dan-galadima-c03",
+                "name": "Alh Kanti Gidan Alh Kanti",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "za-bakura",
+        "name": "Bakura",
+        "code": "BAKURA",
+        "wards": [
+          {
+            "id": "za-bakura-bakura",
+            "name": "Bakura",
+            "code": "BAKURA",
+            "communities": [
+              {
+                "id": "za-bakura-bakura-c01",
+                "name": "Gidan Bala I Women Centre",
+                "code": "C01"
+              },
+              {
+                "id": "za-bakura-bakura-c02",
+                "name": "J N I Islamiya School",
+                "code": "C02"
+              },
+              {
+                "id": "za-bakura-bakura-c03",
+                "name": "Sh Ubadawak Village Head Office",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "za-bakura-birnin-tudu",
+            "name": "Birnin Tudu",
+            "code": "BIRNIN-T",
+            "communities": [
+              {
+                "id": "za-bakura-birnin-tudu-c01",
+                "name": "Shiyar Tudu",
+                "code": "C01"
+              },
+              {
+                "id": "za-bakura-birnin-tudu-c02",
+                "name": "Shiyar Ajiya I Adult Edu Class",
+                "code": "C02"
+              },
+              {
+                "id": "za-bakura-birnin-tudu-c03",
+                "name": "G Gage Rima Office",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "za-bakura-dakko",
+            "name": "Dakko",
+            "code": "DAKKO",
+            "communities": [
+              {
+                "id": "za-bakura-dakko-c01",
+                "name": "Dakko I Model",
+                "code": "C01"
+              },
+              {
+                "id": "za-bakura-dakko-c02",
+                "name": "Dakko II Village Head Office",
+                "code": "C02"
+              },
+              {
+                "id": "za-bakura-dakko-c03",
+                "name": "Butsa Adult Edu Class",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "za-birnin-magaji",
+        "name": "Birnin Magaji",
+        "code": "BIRNIN-MAGAJ",
+        "wards": [
+          {
+            "id": "za-birnin-magaji-birnin-magaji",
+            "name": "Birnin Magaji",
+            "code": "BIRNIN-M",
+            "communities": [
+              {
+                "id": "za-birnin-magaji-birnin-magaji-c01",
+                "name": "Gidan Dawa Shiyar Maigari",
+                "code": "C01"
+              },
+              {
+                "id": "za-birnin-magaji-birnin-magaji-c02",
+                "name": "Gidan Kyabda",
+                "code": "C02"
+              },
+              {
+                "id": "za-birnin-magaji-birnin-magaji-c03",
+                "name": "Magare I Kofar Magare",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "za-birnin-magaji-danfami-sabon-birini",
+            "name": "Danfami Sabon Birini",
+            "code": "DANFAMI-",
+            "communities": [
+              {
+                "id": "za-birnin-magaji-danfami-sabon-birini-c01",
+                "name": "Buntume I Kofar Magaji",
+                "code": "C01"
+              },
+              {
+                "id": "za-birnin-magaji-danfami-sabon-birini-c02",
+                "name": "Buntume II Shagon Ada",
+                "code": "C02"
+              },
+              {
+                "id": "za-birnin-magaji-danfami-sabon-birini-c03",
+                "name": "Dan Fami I Shiyar Magaji",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "za-birnin-magaji-gora",
+            "name": "Gora",
+            "code": "GORA",
+            "communities": [
+              {
+                "id": "za-birnin-magaji-gora-c01",
+                "name": "Bukut Tabkin Kabaji Garkar Hakimi",
+                "code": "C01"
+              },
+              {
+                "id": "za-birnin-magaji-gora-c02",
+                "name": "Gidan Bagaye I Shiyar Wakili",
+                "code": "C02"
+              },
+              {
+                "id": "za-birnin-magaji-gora-c03",
+                "name": "Gidan Bagaye II Bakin Masallci",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "za-bukkuyum",
+        "name": "Bukkuyum",
+        "code": "BUKKUYUM",
+        "wards": [
+          {
+            "id": "za-bukkuyum-adabka",
+            "name": "Adabka",
+            "code": "ADABKA",
+            "communities": [
+              {
+                "id": "za-bukkuyum-adabka-c01",
+                "name": "Shiyar Sarki I Garka Hakimi",
+                "code": "C01"
+              },
+              {
+                "id": "za-bukkuyum-adabka-c02",
+                "name": "Shiyar Sarki II",
+                "code": "C02"
+              },
+              {
+                "id": "za-bukkuyum-adabka-c03",
+                "name": "Alkama Yar Innuwa",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "za-bukkuyum-bukkuyum",
+            "name": "Bukkuyum",
+            "code": "BUKKUYUM",
+            "communities": [
+              {
+                "id": "za-bukkuyum-bukkuyum-c01",
+                "name": "Shiyar Galadima Dan Bedi",
+                "code": "C01"
+              },
+              {
+                "id": "za-bukkuyum-bukkuyum-c02",
+                "name": "Shiyar Uban Dawaki Women Centre",
+                "code": "C02"
+              },
+              {
+                "id": "za-bukkuyum-bukkuyum-c03",
+                "name": "Shiyar Magaji I Mahada",
+                "code": "C03"
+              }
+            ]
+          },
+          {
+            "id": "za-bukkuyum-gwashi",
+            "name": "Gwashi",
+            "code": "GWASHI",
+            "communities": [
+              {
+                "id": "za-bukkuyum-gwashi-c01",
+                "name": "Gwashi I",
+                "code": "C01"
+              },
+              {
+                "id": "za-bukkuyum-gwashi-c02",
+                "name": "Gwashi II Township",
+                "code": "C02"
+              },
+              {
+                "id": "za-bukkuyum-gwashi-c03",
+                "name": "Akawo I",
+                "code": "C03"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
